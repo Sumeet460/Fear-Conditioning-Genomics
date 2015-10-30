@@ -32,12 +32,12 @@ http://liulab.dfci.harvard.edu/MACS/00README.html
 
 
 ##convert .out file to .gtf file
-
+```
 write.table(tbl, sep = "\t", col.names = F, row.names = F, quote = F, file = "/home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Annotation/mm10.fa.out_2")
 
 
 awk '{ print $5"\t""repbase""\t"$11"\t"$6"\t"$7"\t"$1"\t"$9 }' mm10.fa.out_2 >mm10.fa.out.gtf
-
+```
 chr = 5
 source = repbase
 feature = 11
