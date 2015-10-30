@@ -138,7 +138,8 @@ cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_
 ```
 
 ###2. RNASEQ ANALYSIS:DIFFERENTIAL EXPRESSION:CUFFDIFF
-#CUFFDIFF 
+
+CUFFDIFF 
 
 IMMO-FC Differential expression analysis: using only repeat masked gtf
 ```
@@ -301,6 +302,7 @@ Concatenate files (to include intermediate changes in peak height)
  -5hmC increased during FC 
  -5hmC decreased during FC
  -all dynamic 5hmC loci during FC
+ 
 ```
 cat FC_HC_Common_FCgreaterHC.bed FC_5hmC_Inc.bed > FC_5hmC_Inc_increment.bed
 cat FC_HC_Common_HCgreaterFC.bed FC_5hmC_Dec.bed > FC_5hmC_Dec_increment.bed
