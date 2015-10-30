@@ -3,63 +3,27 @@ Fear-Conditioning-Genomics
 TABLE OF CONTENTS
 
 1. ALIGNMENT: STAR
-2. 5HMC ANALYSIS:PEAK CALLING:MACS
-3. RNASEQ ANALYSIS:DIFFERENTIAL EXPRESSION:CUFFDIFF
-4. RNASEQ ANALYSIS:DIFFERENTIAL EXPRESSION:DESEQ2
-5. RNASEQ ANALYSIS:DIFFERENTIAL SPLICING:CUFFDIFF
-6. RNASEQ ANALYSIS:DIFFERENTIAL SPLICING:DESEQ2/DEXSEQ
-7. PARCE OUT REGIONS OF 5HMC, EXPRESSION, AND ISOFORM REGULATION:BEDTOOLS
-8. ANNOTATION ANALYSIS:HOMER
-9. MOTIF ANALYSIS:HOMER:MOTIF ID AND LOCALIZATION
-10. 5HMC ENRICHMENT ANALYSIS:HOMER:HISTOGRAMS AND SCATTERPLOTS: MOTIFS, PROMOTERS, EXONS, INTRONS, EXONS-INTRONS, CTCF, OTHER GENOMIC REGIONS (CPG ISLANDS, EXONS, LNCRNA, PSEUDOGENES, LOW COMPLEXITY REGIONS, SIMPLE REPEATS, SINES, SATELLITES
+2. RNASEQ ANALYSIS, TRAPSEQ:DIFFERENTIAL EXPRESSION:CUFFDIFF
+3. RNASEQ ANALYSIS, TRAPSEQ:DIFFERENTIAL EXPRESSION:DESEQ2
+4. RNASEQ ANALYSIS, TRAPSEQ:DIFFERENTIAL SPLICING:DESEQ2/DEXSEQ
+5. 5HMC ANALYSIS:PEAK CALLING:MACS
+6. PARCE OUT REGIONS OF 5HMC, EXPRESSION, AND ISOFORM REGULATION:BEDTOOLS
+7. ANNOTATION ANALYSIS:HOMER
+8. MOTIF ANALYSIS:HOMER:MOTIF ID AND LOCALIZATION
+9. 5HMC ENRICHMENT ANALYSIS:HOMER:HISTOGRAMS AND SCATTERPLOTS: MOTIFS, PROMOTERS, EXONS, INTRONS, EXONS-INTRONS, CTCF, OTHER GENOMIC REGIONS (CPG ISLANDS, EXONS, LNCRNA, PSEUDOGENES, LOW COMPLEXITY REGIONS, SIMPLE REPEATS, SINES, SATELLITES
 5HMC AND ALTERNATIVE SPLICING
-11. FAST ANALYSIS: ANNOTATING REGIONS OF THE GENOME BASED ON DISEASE RELEVANT SNP CONTENT
-12. Homology ANALYSIS:PHASTCONS, ETC
+10. FAST ANALYSIS: ANNOTATING REGIONS OF THE GENOME BASED ON DISEASE RELEVANT SNP CONTENT
+11. Homology ANALYSIS:PHASTCONS
 
 
-# Links:
-http://homer.salk.edu/homer/ngs/annotation.html
-http://homer.salk.edu/homer/ngs/quantification.html
-http://homer.salk.edu/homer/ngs/peakMotifs.html
-http://homer.salk.edu/homer/motif/creatingCustomMotifs.html
-http://liulab.dfci.harvard.edu/MACS/00README.html
-
-
-
-##RepeatMasker Database Creation
-#Approach: download repeat masked genome fasta; download genomic repeat element annotation file. Run alignment on the repeat masked fasta, so that repeat elements are captured. 
-#links: http://www.repeatmasker.org/; http://www.repeatmasker.org/genomicDatasets/RMGenomicDatasets.html
-
-
-##convert .out file to .gtf file
-```
-write.table(tbl, sep = "\t", col.names = F, row.names = F, quote = F, file = "/home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Annotation/mm10.fa.out_2")
-
-
-awk '{ print $5"\t""repbase""\t"$11"\t"$6"\t"$7"\t"$1"\t"$9 }' mm10.fa.out_2 >mm10.fa.out.gtf
-```
-chr = 5
-source = repbase
-feature = 11
-str = 6
-stp = 7
-score =1 
-attribute = 9
-
-
-
-###Analyzing repetitive genomic sequyences: genome fasta file - does it contain all the repetitive sequences or is it altered somehow to represent these difficult to map regions as N? gtf file - need one that represents all these elements. BAM alignments - need to feed them a gtf file with complete set of annotations for best alignment
-
-
-###STAR Genome Alignment
-##Genome Indices
-#Generate STAR Indices using repeat masked gtf file from UCSC, cat with a normal gtf file 
-
+###1. ALIGNMENT: STAR
+#Generate STAR Genome Index using repeat masked gtf file from UCSC, cat with a normal gtf file  - in order to capture the repetive elements in RepBase in the index
 ```
 /home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --runMode genomeGenerate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --genomeFastaFiles /home/Shared/PengLab/iGenomes/Mus_musculus/UCSC/mm10/Sequence/WholeGenomeFasta/genome.fa --runThreadN 25 --sjdbGTFfile /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Annotation/mm10_UCSC_RepeatMasked_Genes.gtf --sjdbOverhang 100 --limitSjdbInsertNsj 5000000
 ```
 
-#Alignment Run:
+Alignment Runs:
+Automated - didn't implement this, but would've save a lot of time...
 ```
 for f in `cat files`; do STAR --genomeDir ../STAR/ENSEMBL.homo_sapiens.release-75 \
 --readFilesIn fastq/$f\_1.fastq fastq/$f\_2.fastq \
@@ -72,158 +36,134 @@ mkdir 19_Homecage
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/19_Homecage
 /home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --readFilesCommand zcat --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/fastq_files/19_Homecage_ACAGTG_L002_R1_001.fastq.gz --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/19_Homecage/19_Homecage_ --outSAMtype BAM SortedByCoordinate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --runThreadN 25 --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts 
 ```
-#20_Homecage
+20_Homecage
 ```
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/
 mkdir 20_Homecage
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/20_Homecage
 /home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --readFilesCommand zcat --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/fastq_files/20_Homecage_GCCAAT_L002_R1_001.fastq.gz --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/20_Homecage/20_Homecage_ --outSAMtype BAM SortedByCoordinate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --runThreadN 25 --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts 
 ```
-#21_Homecage
-
+21_Homecage
+```
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker
-
 mkdir 21_Homecage
-
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/21_Homecage
-
 /home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --readFilesCommand zcat --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/fastq_files/21_Homecage_CAGATC_L002_R1_001.fastq.gz --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/21_Homecage/21_Homecage_ --outSAMtype BAM SortedByCoordinate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --runThreadN 25 --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts 
-
-#22_Homecage
-
+```
+22_Homecage
+```
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker
-
 mkdir 22_Homecage
-
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/22_Homecage
-
 /home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --readFilesCommand zcat --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/fastq_files/22_Homecage_CTTGTA_L002_R1_001.fastq.gz --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/22_Homecage/22_Homecage_ --outSAMtype BAM SortedByCoordinate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --runThreadN 25 --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts 
-
-#23_Homecage
-
+```
+23_Homecage
+```
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker
-
 mkdir 23_Homecage
-
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/23_Homecage
-
-
 /home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --readFilesCommand zcat --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/fastq_files/23_Homecage_AGTCAA_L002_R1_001.fastq.gz --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/23_Homecage/23_Homecage_ --outSAMtype BAM SortedByCoordinate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --runThreadN 25 --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts 
-
-#24_Homecage
-
+```
+24_Homecage
+```
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker
-
 mkdir 24_Homecage
-
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/24_Homecage
-
 /home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --readFilesCommand zcat --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/fastq_files/24_Homecage_AGTTCC_L002_R1_001.fastq.gz --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/24_Homecage/24_Homecage_ --outSAMtype BAM SortedByCoordinate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --runThreadN 25 --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts
-
-#10_FC-Alone
-
+```
+10_FC-Alone
+```
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker
-
 mkdir 10_FC-Alone
-
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/10_FC-Alone
-
 /home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --readFilesCommand zcat --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/fastq_files/10_FC-Alone_AGTTCC_L001_R1_001.fastq.gz --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/10_FC-Alone/10_FC-Alone_ --outSAMtype BAM SortedByCoordinate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --runThreadN 25 --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts
- 
-#11_FC-Alone
-
+ ```
+11_FC-Alone
+```
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker
-
 mkdir 11_FC-Alone
-
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/11_FC-Alone
-
 /home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --readFilesCommand zcat --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/fastq_files/11_FC-Alone_CGATGT_L002_R1_001.fastq.gz --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/11_FC-Alone/11_FC-Alone_ --outSAMtype BAM SortedByCoordinate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --runThreadN 25 --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts
+```
 
-
-#12_FC-Alone
-
+12_FC-Alone
+```
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker
-
 mkdir 12_FC-Alone
-
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/12_FC-Alone
-
 /home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --readFilesCommand zcat --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/fastq_files/12_FC-Alone_TGACCA_L002_R1_001.fastq.gz --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/12_FC-Alone/12_FC-Alone_ --outSAMtype BAM SortedByCoordinate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --runThreadN 25 --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts
-
-#9_FC-Alone
-
+```
+9_FC-Alone
+```
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker
-
 mkdir 9_FC-Alone
-
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/9_FC-Alone
-
 /home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --readFilesCommand zcat --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/fastq_files/9_FC-Alone_AGTCAA_L001_R1_001.fastq.gz --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/9_FC-Alone/9_FC-Alone_ --outSAMtype BAM SortedByCoordinate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --runThreadN 25 --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts
- 
-#8_FC-Alone
-
+ ```
+8_FC-Alone
+```
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker
-
 mkdir 8_FC-Alone
-
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/8_FC-Alone
-
 /home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --readFilesCommand zcat --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/fastq_files/8_FC-Alone_CTTGTA_L001_R1_001.fastq.gz --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/8_FC-Alone/8_FC-Alone_ --outSAMtype BAM SortedByCoordinate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --runThreadN 25 --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts
+```
 
+1_IMMO-FC
+```
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker
-
-
 mkdir 1_IMMO-FC
-
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/1_IMMO-FC
-
 /home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --readFilesCommand zcat --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/fastq_files/1_IMMO-FC_CGATGT_L001_R1_001.fastq.gz --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/1_IMMO-FC/1_IMMO-FC_ --outSAMtype BAM SortedByCoordinate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --runThreadN 25 --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts
-
-
+```
+2_IMMO-FC
+```
 mkdir 2_IMMO-FC
-
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/2_IMMO-FC
-
 /home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --readFilesCommand zcat --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/fastq_files/2_IMMO-FC_TGACCA_L001_R1_001.fastq.gz --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/2_IMMO-FC/2_IMMO-FC_ --outSAMtype BAM SortedByCoordinate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --runThreadN 25 --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts
-
+```
+3_IMMO-FC
+```
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/
 mkdir 3_IMMO-FC
-
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/3_IMMO-FC
-
 /home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --readFilesCommand zcat --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/fastq_files/3_IMMO-FC_ACAGTG_L001_R1_001.fastq.gz --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/3_IMMO-FC/3_IMMO-FC_ --outSAMtype BAM SortedByCoordinate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --runThreadN 25 --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts
-
+```
+4_IMMO-FC
+```
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/
 mkdir 4_IMMO-FC
-
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/4_IMMO-FC
-
 /home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --readFilesCommand zcat --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/fastq_files/4_IMMO-FC_GCCAAT_L001_R1_001.fastq.gz --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/4_IMMO-FC/4_IMMO-FC_ --outSAMtype BAM SortedByCoordinate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --runThreadN 25 --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts
+```
 
-
-##RNAseq
-
+###2. RNASEQ ANALYSIS:DIFFERENTIAL EXPRESSION:CUFFDIFF
 #CUFFDIFF 
 
-#IMMO-FC
+IMMO-FC Differential expression analysis: using only repeat masked gtf
+```
 cuffdiff -o ./AmygHC_vs_AmygIMMO-FC_RepeatMasked_SMALL -L HC,IMMO-FC -p 25 -u /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Annotation/mm10_UCSC_RepeatMasked.gtf /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/19_Homecage_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/20_Homecage_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/21_Homecage_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/22_Homecage_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/23_Homecage_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/24_Homecage_Aligned.sortedByCoord.out.bam /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/1_IMMO-FC_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/2_IMMO-FC_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/3_IMMO-FC_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/4_IMMO-FC_Aligned.sortedByCoord.out.bam 
+```
 
-$FC
+
+
+FC Differential expression analysis: using only repeat masked gtf
+```
 cuffdiff -o ./AmygFC_vs_AmygHC_RepeatMasked_SMALL -L HC,FC -p 25 -u /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Annotation/mm10_UCSC_RepeatMasked.gtf /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/19_Homecage_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/20_Homecage_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/21_Homecage_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/22_Homecage_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/23_Homecage_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/24_Homecage_Aligned.sortedByCoord.out.bam /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/10_FC-Alone_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/11_FC-Alone_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/12_FC-Alone_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/8_FC-Alone_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/9_FC-Alone_Aligned.sortedByCoord.out.bam &
+```
 
-
-#DESEQ2
+###3. RNASEQ ANALYSIS:DIFFERENTIAL EXPRESSION:DESEQ2
 
 se is the RangedSummarizedExperiment object containing counts and information about the samples. In this example design we control for batch and condition, which should be columns of colData(se)
-'''{r}
+```{r}
 dds <- DESeqDataSet(se, design = ~ batch + condition)
 dds <- DESeq(dds)
 res <- results(dds, contrast=c("condition","trt","con"))
-'''
+```
 
 Combine counts from geneCounts function of STAR to generate count matrices:
 
 Read the Reads/Gene table 
-'''{r}
+```{r}
 FC10Alone=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/10_FC-Alone/10_FC-Alone_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")
 
 FC11Alone=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/11_FC-Alone/11_FC-Alone_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")
@@ -245,12 +185,10 @@ Homecage24=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobi
 FC8Alone=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/8_FC-Alone/8_FC-Alone_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")
 
 FC9Alone=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/9_FC-Alone/9_FC-Alone_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")
-
-'''
-
+```
 
 Combine column 1, with column 2 from every dataframe, add a header with the name of the sample that column came from
-'''{r}
+```{r}
 
 HCvsFC_gene_counts = data.frame(FC10Alone$V2, FC11Alone$V2, FC12Alone$V2, FC8Alone$V2, FC9Alone$V2, Homecage19$V2, Homecage20$V2, Homecage21$V2, Homecage22$V2, Homecage23$V2, Homecage24$V2, row.names = FC10Alone$V1) 
 
@@ -260,88 +198,57 @@ rename(HCvsFC_gene_counts, c("FC10Alone.V2"="FC10Alone"))
 FC11Alone$V2, FC12Alone$V2, FC8Alone$V2, FC9Alone$V2, Homecage19$V2, Homecage20$V2, Homecage21$V2, Homecage22$V2, Homecage23$V2, Homecage24$V2
 
 col.names = c("FC10Alone$V2", "FC11Alone$V2", "FC12Alone$V2", "FC8Alone$V2", "FC9Alone$V2", "Homecage19$V2", "Homecage20$V2", "Homecage21$V2", "Homecage22$V2", "Homecage23$V2", "Homecage24$V2)
-
-'''
-
-'''{r}
-'''
-
-'''{r}
-'''
-
-'''{r}
-'''
-
-'''{r}
-'''
-
-'''{r}
-'''
-
-'''{r}
-'''
-
-'''{r}
-'''
-
-'''{r}
-'''
-
-'''{r}
-'''
-
-'''{r}
-'''
-##5hmCseq
+```
 
 
-###DEseq2
+###4. RNASEQ ANALYSIS:DIFFERENTIAL SPLICING:DESEQ2/DEXSEQ & CUFFDIFF
 
 
+###5. 5HMC ANALYSIS:PEAK CALLING:MACS                                                                                    
 
-
-###MACS Peak Calling                                                                                      
-#peaksplitter to call subpeaks within complex regions
-
-#MACS/FC1
+MACS + peaksplitter to call subpeaks within complex regions
+MACS/FC1
+```
 /home/ssharma/bin/MACS-1.4.2/bin/macs14 --name fear_conditioning_FC1_5hmC_3 --format BAM --gsize mm --call-subpeaks --bdg --treatment /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs/Sample_FC1.bam --control /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs/Sample_InputHC1.bam &
-
-#MACS/FC2
+```
+MACS/FC2
+```
 /home/ssharma/bin/MACS-1.4.2/bin/macs14 --name fear_conditioning_FC2_5hmC_MACS --format BAM --gsize mm --call-subpeaks --bdg --treatment /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs/Sample_FC2.bam --control /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs/Sample_InputHC1.bam &
-
-#MACS/HC1
+```
+MACS/HC1
+```
 /home/ssharma/bin/MACS-1.4.2/bin/macs14 --name fear_conditioning_HC1_5hmC_MACS --format BAM --gsize mm --call-subpeaks --bdg --treatment /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs/Sample_HC1.bam --control /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs/Sample_InputHC1.bam &
-
-#MACS/HC2
+```
+MACS/HC2
+```
 /home/ssharma/bin/MACS-1.4.2/bin/macs14 --name fear_conditioning_HC2_5hmC_MACS --format BAM --gsize mm --call-subpeaks --bdg --treatment /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs/Sample_HC2.bam --control /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs/Sample_InputHC1.bam &
+```
 
+###6. PARCE OUT REGIONS OF 5HMC, EXPRESSION, AND ISOFORM REGULATION:BEDTOOLS
 
+Calling DhMRs common to both sequencing experiments. Save the sequence JUST where two peaks overlap (no extra peak space unique to one sample or the other). Also create a "Peakheight" file that contains the entries that are overlapped; allows downstream analysis of relative 5hmC changes
 
+Note: needed to remove the header line -- bedtools was unable to recognize it: Chromosome      Start   End     Height  SummitPosition
 
-
-
-
-
-
-###Bedtools/
-##calling DhMRs common to both sequencing experiments. Save the sequence JUST where two peaks overlap (no extra peak space unique to one sample or the other). Also create a "Peakheight" file that contains the entries that are overlapped; allows downstream analysis of relative 5hmC changes
-#Note: needed to remove the header line -- bedtools was unable to recognize it: Chromosome      Start   End     Height  SummitPosition
-
-#bedtools/HC1_HC2_BTIntersect.peaks.subpeaks.bed
+Common Homecage peaks
+```
 bedtools intersect -a /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/fear_conditioning_HC1_5hmC_MACS/fear_conditioning_HC1_5hmC_MACS_peaks.subpeaks.bed -b /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/fear_conditioning_HC2_5hmC_MACS/fear_conditioning_HC2_5hmC_MACS_peaks.subpeaks.bed -bed -sorted -g /home/Shared/PengLab/iGenomes/Mus_musculus/UCSC/mm10/Annotation/Genes/ChromInfo.txt >HC1_HC2_BTIntersect.peaks.subpeaks.bed
-
-#bedtools/HC1_HC2_BTIntersect.peaks.subpeaks_PeakHeight.bed
+```
+Common homecage peaks; retain all the fields, so that peak height can be kept for downstream analyses
+```
 bedtools intersect -a /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/fear_conditioning_HC1_5hmC_MACS/fear_conditioning_HC1_5hmC_MACS_peaks.subpeaks.bed -b /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/fear_conditioning_HC2_5hmC_MACS/fear_conditioning_HC2_5hmC_MACS_peaks.subpeaks.bed -bed -sorted -wa -wb -g /home/Shared/PengLab/iGenomes/Mus_musculus/UCSC/mm10/Annotation/Genes/ChromInfo.txt >HC1_HC2_BTIntersect.peaks.subpeaks_PeakHeight.bed
-
-#bedtools/FC1_FC2_BTIntersect.peaks.subpeaks.bed
+```
+Common fear conditioning peaks
+```
 bedtools intersect -a /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/fear_conditioning_FC1_5hmC_MACS/fear_conditioning_FC1_5hmC_3_peaks.subpeaks.bed -b /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/fear_conditioning_FC2_5hmC_MACS/fear_conditioning_FC2_5hmC_MACS_peaks.subpeaks.bed -bed -sorted -g /home/Shared/PengLab/iGenomes/Mus_musculus/UCSC/mm10/Annotation/Genes/ChromInfo.txt >FC1_FC2_BTIntersect.peaks.subpeaks.bed
-
-#bedtools/FC1_FC2_BTIntersect.peaks.subpeaks_PeakHeight.bed
+```
+Common fear conditioning peaks; retain all the fields, so that peak height can be kept for downstream analyses
+```
 bedtools intersect -a /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/fear_conditioning_FC1_5hmC_MACS/fear_conditioning_FC1_5hmC_3_peaks.subpeaks.bed -b /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/fear_conditioning_FC2_5hmC_MACS/fear_conditioning_FC2_5hmC_MACS_peaks.subpeaks.bed -bed -sorted -wa -wb -g /home/Shared/PengLab/iGenomes/Mus_musculus/UCSC/mm10/Annotation/Genes/ChromInfo.txt >FC1_FC2_BTIntersect.peaks.subpeaks_PeakHeight.bed
+```
 
-
-##R Script to take the average of columns 4 and 9 from the HC1_HC2_BTIntersect.peaks.subpeaks_PeakHeight.bed file and adds it as a new column to the HC1_HC2_BTIntersect.peaks.subpeaks.bed file (ditto for FC files). End up with a BED file containing DhMRs + the average peak height from both datasets at this locus.
-
+R Script to take the average of columns 4 and 9 from the HC1_HC2_BTIntersect.peaks.subpeaks_PeakHeight.bed file and adds it as a new column to the HC1_HC2_BTIntersect.peaks.subpeaks.bed file (ditto for FC files). End up with a BED file containing DhMRs + the average peak height from both datasets at this locus.
+```{r}
 FC_peaks = read.table("FC1_FC2_BTIntersect.peaks.subpeaks.bed")
 FC_heights = read.table("FC1_FC2_BTIntersect.peaks.subpeaks_PeakHeight.bed")
 FC_avg_heights = (FC_heights$V4+FC_heights$V9)/2
@@ -353,34 +260,32 @@ HC_heights = read.table("HC1_HC2_BTIntersect.peaks.subpeaks_PeakHeight.bed")
 HC_avg_heights = (HC_heights$V4+HC_heights$V9)/2
 HC_peaks$HC_avg_heights = HC_avg_heights
 write.table(HC_peaks, sep = "\t", col.names = F, row.names = F, quote = F, file = "/home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/HC_peaks.bed")
+```
 
-
-#FC_5hmC_Inc: Peaks that appear in fear conditioning; no peak at this loci in HC
-
+FC_5hmC_Inc: Peaks that appear in fear conditioning; no peak at this loci in HC
+```
 bedtools intersect -a /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_peaks.bed -b /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/HC_peaks.bed -v -bed -sorted -g /home/Shared/PengLab/iGenomes/Mus_musculus/UCSC/mm10/Annotation/Genes/ChromInfo.txt >FC_5hmC_Inc.bed
-
-
-#FC_5hmC_Dec: Peaks disappear in fear conditioning; peak at this locus in HC dissapears in FC
-
+```
+FC_5hmC_Dec: Peaks disappear in fear conditioning; peak at this locus in HC dissapears in FC
+```
 bedtools intersect -a /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/HC_peaks.bed -b /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_peaks.bed  -v -bed -sorted -g /home/Shared/PengLab/iGenomes/Mus_musculus/UCSC/mm10/Annotation/Genes/ChromInfo.txt >FC_5hmC_Dec.bed
-
-
-#Remove tmp files
+```
+Remove tmp files
+```
 rm FC1_FC2_BTIntersect.peaks.subpeaks.bed FC1_FC2_BTIntersect.peaks.subpeaks_PeakHeight.bed FC_5hmC_Dec_2.bed HC1_HC2_BTIntersect.peaks.subpeaks.bed FC_5hmC_Inc_2.bed HC1_HC2_BTIntersect.peaks.subpeaks_PeakHeight.bed
-
-
-
-#FC_5hmC_common_Inc: Peak is present in both HC and FC samples; but peak is smaller in HC than FC (cutoff = ??)
-
-#bedtools/FC_HC_Common.bed
+```
+FC_5hmC_common_Inc: Peak is present in both HC and FC samples; but peak is smaller in HC than FC (cutoff = ??)
+bedtools/FC_HC_Common.bed
+```
 bedtools intersect -a /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_peaks.bed -b /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/HC_peaks.bed -bed -sorted -g /home/Shared/PengLab/iGenomes/Mus_musculus/UCSC/mm10/Annotation/Genes/ChromInfo.txt >FC_HC_Common.bed
-
-#bedtools/FC_HC_Common_PeakHeights.bed
+```
+bedtools/FC_HC_Common_PeakHeights.bed
+```
 bedtools intersect -a /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_peaks.bed -b /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/HC_peaks.bed -bed -sorted -wa -wb -g /home/Shared/PengLab/iGenomes/Mus_musculus/UCSC/mm10/Annotation/Genes/ChromInfo.txt >FC_HC_Common_PeakHeights.bed
-
-#RScript/FC>HC_diff25_Common.bed & FC<HC_diff25_Common.bed
-#Cutoff = 25 (arbitrary)
-
+```
+RScript/FC>HC_diff25_Common.bed & FC<HC_diff25_Common.bed
+Cutoff = 25 (arbitrary)
+```
 FC_HC_common_peaks = read.table("FC_HC_Common.bed")
 FC_HC_common_heights = read.table("FC_HC_Common_PeakHeights.bed")
 FC_HC_common_peaks$FCminusHC <- FC_HC_common_heights$V4 - FC_HC_common_heights$V10
@@ -389,35 +294,37 @@ FC_HC_Common_FCgreaterHC = subset(FC_HC_common_peaks, FCminusHC >=25)
 write.table(FC_HC_Common_FCgreaterHC, sep = "\t", col.names = F, row.names = F, quote = F, file = "/home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_HC_Common_FCgreaterHC.bed")
 FC_HC_Common_HCgreaterFC = subset(FC_HC_common_peaks, HCminusFC >=25)
 write.table(FC_HC_Common_HCgreaterFC, sep = "\t", col.names = F, row.names = F, quote = F, file = "/home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_HC_Common_HCgreaterFC.bed")
+```
 
-
-#cat/FC_5hmC_Inc
+Concatenate files (to include intermediate changes in peak height)
+ -5hmC increased during FC 
+ -5hmC decreased during FC
+ -all dynamic 5hmC loci during FC
+```
 cat FC_HC_Common_FCgreaterHC.bed FC_5hmC_Inc.bed > FC_5hmC_Inc_increment.bed
-#cat/HC_5hmC_Inc
 cat FC_HC_Common_HCgreaterFC.bed FC_5hmC_Dec.bed > FC_5hmC_Dec_increment.bed
-#cat/FC_AllDynamic5hmC
 cat HCvsFC_5hmC_Inc_increment.bed HCvsFC_5hmC_Dec_increment.bed > HCvsFC_AllDynamic5hmC.bed
-#cat/RNAseq_wholegenes/lncRNA_array_wholegenes/all
-#cat/RNAseq_wholegenes_uprgulated/lncRNA_array_wholegenes_upregulated
-#cat/RNAseq_wholegenes_downregulated/lncRNA_array_wholegenes_downregulated
-#cat/RNAseq/microRNA
+```
 
+Other interesting datasets to generate
+ -RNAseq and lncRNA
+ -RNAseq and microRNAs
+ -RNAseq and TRAPSeq
+ -5hmCseq and enhancers
+ -5hmCseq and insulators
 
-##RNseq v TRAPseq data
-#Which genes are most regulated in the consolidation window at the transcriptional and translational level. Any isoform differences that occur in the RNAseq which are captured by the TRAP seq (i.e. which genes are being dynamically spliced at the level of the nucleus and cell-wide). Establish which biochemical circuits are most active in the consolidation window by seeing which protein coding RNAs are being dynamically spliced. Co-transcriptional translation, which RNAs are being created to be poised for translation vs which ones might have reached peak expression earlier, or will reach it later. Most of the 5-hmC signal in genes is in intronic regions. Most striking annotation enrichment changes that occur in FC are at introns (high 5hmC HC introns, low 5hmC FC introns), and SINE elements. Look at splicing, and regulation of genes by mobile, repetitive elements --> how would these contribute to individual differences in cognition/how variable are SINE elements in the population. 
-
-
-
-###Annotation analysis
-#AnnotatePeaks/HCvsFC_5hmCseq_Inc
-#AnnotatePeaks/HCvsFC_5hmCseq_Dec
-#AnnotatePeaks/HCvsFC_5hmCseq_I
+###7. ANNOTATION ANALYSIS:HOMER
+ -HCvsFC_5hmCseq_Inc
+ -HCvsFC_5hmCseq_Dec
+ -HCvsFC_5hmCseq_ALL
+ -HCvsFC RNAseq
+ -HCvsFC 5hmC & RNAseq overlap
+ -HCvsFC TRAPseq: unique and distinct from regular RNAseq
+ -
 
 
 ORDER OF ANNOTATION ENRICHMENT CHANGE (HC > FC)
 intron>exon>intergenic>LTR~>promoter
-
-#cat/RNAseq/TRAP_seq
 
 ##prep format and sort the BED files
 #RNAseq/wholegene
