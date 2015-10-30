@@ -273,29 +273,22 @@ FC_5hmC_Dec: Peaks disappear in fear conditioning; peak at this locus in HC diss
 bedtools intersect -a /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/HC_peaks.bed -b /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_peaks.bed  -v -bed -sorted -g /home/Shared/PengLab/iGenomes/Mus_musculus/UCSC/mm10/Annotation/Genes/ChromInfo.txt >FC_5hmC_Dec.bed
 ```
 Remove tmp files
+
 ```
 rm FC1_FC2_BTIntersect.peaks.subpeaks.bed FC1_FC2_BTIntersect.peaks.subpeaks_PeakHeight.bed FC_5hmC_Dec_2.bed HC1_HC2_BTIntersect.peaks.subpeaks.bed FC_5hmC_Inc_2.bed HC1_HC2_BTIntersect.peaks.subpeaks_PeakHeight.bed
 ```
+
 FC_5hmC_common_Inc: Peak is present in both HC and FC samples; but peak is smaller in HC than FC (cutoff = ??)
 bedtools/FC_HC_Common.bed
+
 ```
 bedtools intersect -a /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_peaks.bed -b /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/HC_peaks.bed -bed -sorted -g /home/Shared/PengLab/iGenomes/Mus_musculus/UCSC/mm10/Annotation/Genes/ChromInfo.txt >FC_HC_Common.bed
 ```
+
 bedtools/FC_HC_Common_PeakHeights.bed
+
 ```
 bedtools intersect -a /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_peaks.bed -b /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/HC_peaks.bed -bed -sorted -wa -wb -g /home/Shared/PengLab/iGenomes/Mus_musculus/UCSC/mm10/Annotation/Genes/ChromInfo.txt >FC_HC_Common_PeakHeights.bed
-```
-RScript/FC>HC_diff25_Common.bed & FC<HC_diff25_Common.bed
-Cutoff = 25 (arbitrary)
-```
-FC_HC_common_peaks = read.table("FC_HC_Common.bed")
-FC_HC_common_heights = read.table("FC_HC_Common_PeakHeights.bed")
-FC_HC_common_peaks$FCminusHC <- FC_HC_common_heights$V4 - FC_HC_common_heights$V10
-FC_HC_common_peaks$HCminusFC <- FC_HC_common_heights$V10 - FC_HC_common_heights$V4
-FC_HC_Common_FCgreaterHC = subset(FC_HC_common_peaks, FCminusHC >=25)
-write.table(FC_HC_Common_FCgreaterHC, sep = "\t", col.names = F, row.names = F, quote = F, file = "/home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_HC_Common_FCgreaterHC.bed")
-FC_HC_Common_HCgreaterFC = subset(FC_HC_common_peaks, HCminusFC >=25)
-write.table(FC_HC_Common_HCgreaterFC, sep = "\t", col.names = F, row.names = F, quote = F, file = "/home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_HC_Common_HCgreaterFC.bed")
 ```
 
 Concatenate files (to include intermediate changes in peak height)
@@ -309,28 +302,22 @@ cat FC_HC_Common_HCgreaterFC.bed FC_5hmC_Dec.bed > FC_5hmC_Dec_increment.bed
 cat HCvsFC_5hmC_Inc_increment.bed HCvsFC_5hmC_Dec_increment.bed > HCvsFC_AllDynamic5hmC.bed
 ```
 
-Other interesting datasets to generate
- -RNAseq and lncRNA
- -RNAseq and microRNAs
- -RNAseq and TRAPSeq
- -5hmCseq and enhancers
- -5hmCseq and insulators
+FC greater than HC and FC less than HC, cutoff - peak height difference > or < 25 
 
-###7. ANNOTATION ANALYSIS:HOMER
- -HCvsFC_5hmCseq_Inc
- -HCvsFC_5hmCseq_Dec
- -HCvsFC_5hmCseq_ALL
- -HCvsFC RNAseq
- -HCvsFC 5hmC & RNAseq overlap
- -HCvsFC TRAPseq: unique and distinct from regular RNAseq
- -
+```{r}
+FC_HC_common_peaks = read.table("FC_HC_Common.bed")
+FC_HC_common_heights = read.table("FC_HC_Common_PeakHeights.bed")
+FC_HC_common_peaks$FCminusHC <- FC_HC_common_heights$V4 - FC_HC_common_heights$V10
+FC_HC_common_peaks$HCminusFC <- FC_HC_common_heights$V10 - FC_HC_common_heights$V4
+FC_HC_Common_FCgreaterHC = subset(FC_HC_common_peaks, FCminusHC >=25)
+write.table(FC_HC_Common_FCgreaterHC, sep = "\t", col.names = F, row.names = F, quote = F, file = "/home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_HC_Common_FCgreaterHC.bed")
+FC_HC_Common_HCgreaterFC = subset(FC_HC_common_peaks, HCminusFC >=25)
+write.table(FC_HC_Common_HCgreaterFC, sep = "\t", col.names = F, row.names = F, quote = F, file = "/home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_HC_Common_HCgreaterFC.bed")
+```
 
 
-ORDER OF ANNOTATION ENRICHMENT CHANGE (HC > FC)
-intron>exon>intergenic>LTR~>promoter
-
-##prep format and sort the BED files
-#RNAseq/wholegene
+prep format and sort the BED files
+RNAseq/wholegene
 bedtools sort -chrThenSizeA -i HCvsFC_RNAseq_wholegene_ALL.bed >HCvsFC_RNAseq_wholegene_ALL_sorted.bed
 #RNAseq/upregulated
 #RNAseq/downregulated
@@ -345,105 +332,101 @@ bedtools sort -chrThenSizeA -i HCvsFC_5hmC_Dec_increment.bed >HCvsFC_5hmC_Dec_in
 
 
 
+MISCELLANEOUS
 
-#bedtools/RNAseq_wholegene/5hmC_ALL
-# -wb option --> write out the entirety of the 5hmC peak that overlaps with a 5hmC region; find any motifs even if they aren't precisely within body of gene
+bedtools/RNAseq_wholegene/5hmC_ALL
+-wb option --> write out the entirety of the 5hmC peak that overlaps with a 5hmC region; find any motifs even if they aren't precisely within body of gene
+```
 bedtools intersect -a /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_wholegene_ALL_sorted.bed -b /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_AllDynamic5hmC_sorted.bed -v -bed -wb >HCvsFC_RNAseq_wholegene_5hmC_all.bed
-
 #bedtools/RNAseq_wholegene/5hmC_Inc
 bedtools intersect -a /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_wholegene_ALL_sorted.bed -b /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_AllDynamic5hmC_sorted.bed -v -bed -wb >HCvsFC_RNAseq_wholegene_5hmC_all.bed
-
 #bedtools/RNAseq_wholegene/5hmC_Dec
 bedtools intersect -a /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_wholegene_ALL_sorted.bed -b /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_AllDynamic5hmC_sorted.bed -v -bed -wb >HCvsFC_RNAseq_wholegene_5hmC_all.bed
-
 #bedtools/RNAseq_wholegene_upregulated/5hmC_Dec
 bedtools intersect -a /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_wholegene_ALL_sorted.bed -b /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_AllDynamic5hmC_sorted.bed -v -bed -wb >HCvsFC_RNAseq_wholegene_5hmC_all.bed
-
 #bedtools/RNAseq_wholegene_downregulated/5hmC_Dec
 bedtools intersect -a /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_wholegene_ALL_sorted.bed -b /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_AllDynamic5hmC_sorted.bed -v -bed -wb >HCvsFC_RNAseq_wholegene_5hmC_all.bed
-
 #bedtools/RNAseq_wholegene/5hmC_Dec
 bedtools intersect -a /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_wholegene_ALL_sorted.bed -b /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_AllDynamic5hmC_sorted.bed -v -bed -wb >HCvsFC_RNAseq_wholegene_5hmC_all.bed
-
 #bedtools/RNAseq_wholegene/5hmC_Dec
 bedtools intersect -a /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_wholegene_ALL_sorted.bed -b /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_AllDynamic5hmC_sorted.bed -v -bed -wb >HCvsFC_RNAseq_wholegene_5hmC_all.bed
+```
+MISCELLANEOUS IDEAS
+ -bedtools/RNAseq_all/5hmCseq_genes_TSS_all
+ -bedtools/RNAseq_all/5hmCseq_genes_TSS_all
+ -bedtools/RNAseq_all/5hmCseq_genes_TSS_all
+ -bedtools/RNAseq_splicing_all/5hmCseq_exons_all
+ -bedtools/RNAseq_splicing_all/5hmCseq_introns_all
+ -bedtools/RNAseq_splicing_all/5hmCseq_exon-intron_all
+ -bedtools/RNAseq_promoters/5hmC_Inc
+ -bedtools/RNAseq_promoters/5hmC_Dec
+ -bedtools/RNAseq_promoters_upregulated/5hmC_Inc
+ -bedtools/RNAseq_promoters_downregulated/5hmC_Dec
+ -bedtools/CTCFbindingsites/5hmC_all
+ -bedtools/CTCFbindingsites/5hmC_inc
+ -bedtools/CTCFbindingsites/5hmC_dec
+ -bedtools/CTCFbindingsites/5hmC_Inc/annotation
+ -bedtools/lncRNAs_all/5hmc_all
+ -bedtools/lncRNAs_/5hmc_all
+ -CTCF binding sites with dynamic 5hmC in FC
+ -whole genome CTCF binding sites from Corces Lab
+ -Enhancers with dynamic 5hmC in FC
+ -FANTOM identified enhancers
+ -Neural specific enhancers
+ -Other Datasets? Hi-seq? TADs or mini-TADs, or CTFCF binding sites influential at these positions..proxy for conformational change
 
-#bedtools/RNAseq_all/5hmCseq_genes_TSS_all
+Other interesting coordinate sets to generate
+ -RNAseq and lncRNA
+ -RNAseq and microRNAs
+ -RNAseq and TRAPSeq
+ -5hmCseq and enhancers
+ -5hmCseq and insulators
 
-#bedtools/RNAseq_all/5hmCseq_genes_TSS_all
+###7. ANNOTATION ANALYSIS:HOMER
+ -HCvsFC_5hmCseq_Inc
+ -HCvsFC_5hmCseq_Dec
+ -HCvsFC_5hmCseq_ALL
+ -HCvsFC RNAseq
+ -HCvsFC 5hmC & RNAseq overlap
+ -HCvsFC TRAPseq: unique and distinct from regular RNAseq
+ 
 
-#bedtools/RNAseq_all/5hmCseq_genes_TSS_all
-
-#bedtools/RNAseq_splicing_all/5hmCseq_exons_all
-#bedtools/RNAseq_splicing_all/5hmCseq_introns_all
-#bedtools/RNAseq_splicing_all/5hmCseq_exon-intron_all
-#bedtools/intersect -v/RNAseq_wholegene_all/RNAseq_splicing (alternatively spliced genes not called for expression level changes --> what exactly is delineation between isoform expression and expression level?)
-#bedtools/intersect/RNAseq_splicing_unique/TRAP_seq_splicing_unique (how do isoforms captured in TRAP_seq differ from those captured by total RNA_seq; are certain subsets of spliced pools being translated  --> what is concordance between splicing as a whole, and splice variants that end up being translated?)
-
-#bedtools/RNAseq_promoters/5hmC_Inc
-#bedtools/RNAseq_promoters/5hmC_Dec
-#bedtools/RNAseq_promoters_upregulated/5hmC_Inc
-#bedtools/RNAseq_promoters_downregulated/5hmC_Dec
-
-#bedtools/CTCFbindingsites/5hmC_all
-#bedtools/CTCFbindingsites/5hmC_inc
-#bedtools/CTCFbindingsites/5hmC_dec
-#bedtools/CTCFbindingsites/5hmC_Inc/annotation (what genes are regulated CTCF binding sites near, are any of these in the RNAseq's (lncRNA and polyA))
-
-#bedtools/lncRNAs_all/5hmc_all
-#bedtools/lncRNAs_/5hmc_all
-
-
-###DEXSeq: pictures of DEU for different targets
-
-
-
-
-
-#FindMotifs/5hmC-Seq/FC_5hmC_Inc
-#FindMotifs/5hmC-Seq/FC_5hmC_Dec
-#FindMotifs/5hmC-Seq/FC_5hmC_Common_Inc
-#FindMotifs/5hmC-Seq/FC_5hmC_Common_Dec
-
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_wholegene_Inc
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_wholegene_Dec
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_wholegene_Inc
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_wholegene_Dec
-
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_promoter_Inc
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_promoter_Dec
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_promoter_Inc
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_promoter_Dec
-
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_exons_Inc
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_exons_Dec
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_exons_Inc
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_exons_Dec
-
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_introns_Inc
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_introns_Dec
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_introns_Inc
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_introns_Dec
-
-#FindMotifs/5hmC-Seq_Enhancers/5hmC_Enhancers_overlap
-#FindMotifs/5hmC-Seq_CTCF/5hmC_CTCF_overlap
+ORDER OF ANNOTATION ENRICHMENT CHANGE (HC > FC)
+intron>exon>intergenic>LTR~>promoter
 
 
 
+###8. MOTIF ANALYSIS:HOMER:MOTIF ID AND LOCALIZATION
 
+FindMotifs/5hmC-Seq/FC_5hmC_Inc
+FindMotifs/5hmC-Seq/FC_5hmC_Dec
+FindMotifs/5hmC-Seq/FC_5hmC_Common_Inc
+FindMotifs/5hmC-Seq/FC_5hmC_Common_Dec
 
-##CTCF binding sites with dynamic 5hmC in FC
-#whole genome CTCF binding sites from Corces Lab
+FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_wholegene_Inc
+FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_wholegene_Dec
+FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_wholegene_Inc
+FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_wholegene_Dec
 
-##Enhancers with dynamic 5hmC in FC
-#FANTOM identified enhancers
-#Neural specific enhancers
+FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_promoter_Inc
+FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_promoter_Dec
+FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_promoter_Inc
+FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_promoter_Dec
 
+FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_exons_Inc
+FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_exons_Dec
+FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_exons_Inc
+FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_exons_Dec
 
-##Other Datasets? Hi-seq? TADs or mini-TADs, or CTFCF binding sites influential at these positions..proxy for conformational change
+FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_introns_Inc
+FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_introns_Dec
+FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_introns_Inc
+FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_introns_Dec
 
+FindMotifs/5hmC-Seq_Enhancers/5hmC_Enhancers_overlap
+FindMotifs/5hmC-Seq_CTCF/5hmC_CTCF_overlap
 
-###Tag Directories of 5hmC BAM files to calculate enrichment of 5hmC at loci specified in BED format
+Tag Directories of 5hmC BAM files to calculate enrichment of 5hmC at loci specified in BED format
 makeTagDirectory <Output Dir name> [options] <alignment file1> <"2> <etc>
 
 #makeTagDirectory/HC
