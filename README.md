@@ -17,7 +17,8 @@ TABLE OF CONTENTS
 
 
 ###1. ALIGNMENT: STAR
-#Generate STAR Genome Index using repeat masked gtf file from UCSC, cat with a normal gtf file  - in order to capture the repetive elements in RepBase in the index
+
+Generate STAR Genome Index using repeat masked gtf file from UCSC, cat with a normal gtf file  - in order to capture the repetive elements in RepBase in the index
 ```
 /home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --runMode genomeGenerate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --genomeFastaFiles /home/Shared/PengLab/iGenomes/Mus_musculus/UCSC/mm10/Sequence/WholeGenomeFasta/genome.fa --runThreadN 25 --sjdbGTFfile /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Annotation/mm10_UCSC_RepeatMasked_Genes.gtf --sjdbOverhang 100 --limitSjdbInsertNsj 5000000
 ```
