@@ -1,4 +1,4 @@
-***######Fear-Conditioning-Genomics***
+######Fear-Conditioning-Genomics
 
 ####TABLE OF CONTENTS
 ALIGNMENT: STAR
