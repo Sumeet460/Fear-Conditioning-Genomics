@@ -24,7 +24,7 @@ http://homer.salk.edu/homer/ngs/peakMotifs.html
 http://homer.salk.edu/homer/motif/creatingCustomMotifs.html
 http://liulab.dfci.harvard.edu/MACS/00README.html
 
-###STAR Genome Alignment
+
 
 ##RepeatMasker Database Creation
 #Approach: download repeat masked genome fasta; download genomic repeat element annotation file. Run alignment on the repeat masked fasta, so that repeat elements are captured. 
@@ -51,45 +51,34 @@ attribute = 9
 ###Analyzing repetitive genomic sequyences: genome fasta file - does it contain all the repetitive sequences or is it altered somehow to represent these difficult to map regions as N? gtf file - need one that represents all these elements. BAM alignments - need to feed them a gtf file with complete set of annotations for best alignment
 
 
+###STAR Genome Alignment
+##Genome Indices
+#Generate STAR Indices using repeat masked gtf file from UCSC, cat with a normal gtf file 
 
-
-##Generate STAR Genome Indices from RepeatMasked Genome fasta and annotation file
-#Can't be done. Fasta file is in a weird fucking format. Appears to be designed for primer design really..
-/home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --runMode genomeGenerate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --genomeFastaFiles /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/mm10.fa.align --runThreadN 25 --sjdbGTFfile /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Annotation/mm10.fa.out.gtf --sjdbOverhang 49
-
-#Generate STAR Indices using repeat masked gtf file from UCSC, cat with a normal gtf file --> see what happens
-
+```
 /home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --runMode genomeGenerate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --genomeFastaFiles /home/Shared/PengLab/iGenomes/Mus_musculus/UCSC/mm10/Sequence/WholeGenomeFasta/genome.fa --runThreadN 25 --sjdbGTFfile /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Annotation/mm10_UCSC_RepeatMasked_Genes.gtf --sjdbOverhang 100 --limitSjdbInsertNsj 5000000
+```
 
 #Alignment Run:
-
+```
 for f in `cat files`; do STAR --genomeDir ../STAR/ENSEMBL.homo_sapiens.release-75 \
 --readFilesIn fastq/$f\_1.fastq fastq/$f\_2.fastq \
 --runThreadN 12 --outFileNamePrefix aligned/$f.; done
-
-
-#!/usr/bin/bash
-
-#19_Homecage
-
+```
+19_Homecage
+```
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker
-
 mkdir 19_Homecage
-
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/19_Homecage
-
 /home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --readFilesCommand zcat --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/fastq_files/19_Homecage_ACAGTG_L002_R1_001.fastq.gz --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/19_Homecage/19_Homecage_ --outSAMtype BAM SortedByCoordinate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --runThreadN 25 --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts 
-
+```
 #20_Homecage
-
+```
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/
-
 mkdir 20_Homecage
-
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/20_Homecage
-
 /home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --readFilesCommand zcat --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/fastq_files/20_Homecage_GCCAAT_L002_R1_001.fastq.gz --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/20_Homecage/20_Homecage_ --outSAMtype BAM SortedByCoordinate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --runThreadN 25 --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts 
-
+```
 #21_Homecage
 
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker
