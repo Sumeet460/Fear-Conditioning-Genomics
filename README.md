@@ -592,14 +592,14 @@ More Other analyses:
 
 ###9. 5HMC ENRICHMENT ANALYSIS:HOMER:HISTOGRAMS AND SCATTERPLOTS: MOTIFS, PROMOTERS, EXONS, INTRONS, EXONS-INTRONS, CTCF, OTHER GENOMIC REGIONS (CPG ISLANDS, EXONS, LNCRNA, PSEUDOGENES, LOW COMPLEXITY REGIONS, SIMPLE REPEATS, SINES, SATELLITES
 
-*Workflow*
+***Workflow***
 A) Create tag directories -> containers with all of the bam file reads (from all replicates) in one container - used to pileup all the reads from one condition in order to get a comprehensive picture of the density of reads in particular loci
 B) Create a .motif file using seq2profile, or download the .motif file from http://homer.salk.edu/homer/custom.motifs
 C) Predict sites where the TF will bind in a set of coordinates using annotatepeaks -m -mbed 
 D) Find intensity of epigenetic marks at predetermined set of motif binding sites (as from #2) using annotatepeaks -hist -d to feed in tag directories. Can do this with any predetermined set of coordinates (i.e. RNAseq exon boundaries, promoters, etc)
 
-_A) Create tag directories -> containers with all of the bam file reads (from all replicates) in one container - used to pileup all the reads from one condition in order to get a comprehensive picture of the density of reads in particular loci_
-*Tag Directories* of 5hmC BAM files to calculate enrichment of 5hmC at loci specified in BED format
+**A) Create tag directories -> containers with all of the bam file reads (from all replicates) in one container - used to pileup all the reads from one condition in order to get a comprehensive picture of the density of reads in particular loci**
+Tag Directories of 5hmC BAM files to calculate enrichment of 5hmC at loci specified in BED format
 makeTagDirectory <Output Dir name> [options] <alignment file1> <"2> <etc>
 
 HC
@@ -614,7 +614,7 @@ Input
 ```
 makeTagDirectory Input_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs/Sample_InputHC1.bam &
 ```
-_B) Create a .motif file using seq2profile, or download the .motif file from http://homer.salk.edu/homer/custom.motifs_
+**B) Create a .motif file using seq2profile, or download the .motif file from http://homer.salk.edu/homer/custom.motifs**
 
 Obtaining .motif files: contain the consensus sequence and the frequency distribution of each nucleotide in the consensue
 Two methods:
@@ -654,9 +654,10 @@ creating .motif files - most stringent: *0* mismatches allowed
 seq2profile.pl ACTTTCACTTTC 0 PRDM1 > PRDM1_0.motif
 ```
 
-_C) Predict sites where the TF will bind in a set of coordinates using annotatepeaks -m -mbed_
+**C) Predict sites where the TF will bind in a set of coordinates using annotatepeaks -m -mbed**
 
-_5hmC decreases/HC unique peaks_
+5hmC decreases/HC unique peaks
+
 HIF-1b
 ```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/HC_unique.bed mm10 -size 1000 -m HIF-1b.motif -mbed HIF-1b_HC_unique.bed -hist 10 > HIF_motifs_HC_unique.txt
@@ -699,7 +700,8 @@ Stat3
 ```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_unique.bed mm10 -size 1000 -m Stat3.motif -mbed Stat3.motif_FC_unique.bed > Stat3_motifs_FC_unique.txt &
 ```
-_All mm10 annotated promoters (UCSC)_
+All mm10 annotated promoters (UCSC)
+
 Stat3
 ```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/mm10_allpromoters_-2000_background.bed mm10 -size 1000 -m Stat3.motif -mbed Stat3.motif_mm10_promoters.bed > Stat3_motifs_mm10_promoters.txt &
@@ -709,7 +711,8 @@ HRE (control)
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/mm10_allpromoters_-2000_background.bed mm10 -size 1000 -m HRE.motif -mbed HRE.motif_mm10_promoters.bed > HRE_motifs_mm10_promoters.txt &
 ```
 
-_RNAseq promoters_
+RNAseq promoters
+
 Maz - Using different .motif file
 ```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_RNAseq_promoters.bed mm10 -size 1000 -m Maz.motif -mbed Maz_RNAseq_promoters.bed > Maz_motifs_RNAseq_promoters_2.txt &
@@ -718,7 +721,8 @@ PRDM1
 ```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/FC_RNAseq_promoters.bed mm10 -size 2000 -m PRDM1.motif -mbed PRDM1_RNAseq_promoters.bed > PRDM1_motifs_RNAseq_promoters.txt &
 ```
-_RNAseq promoters - upregulated_
+RNAseq promoters - upregulated
+
 PRDM1
 ```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/FC_RNAseq_promoters_upregulated.bed mm10 -size 2000 -m PRDM1.motif -mbed PRDM1_RNAseq_promoters_upreg.bed > PRDM1_motifs_RNAseq_promoters_upreg.txt &
@@ -824,7 +828,7 @@ exon boundaries: +/- 50 bp from exons
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/mm10_exonboundaries.bed mm10 -size 1000 -fragLength 150 -annStats Homer_mm10_exonboundaries_annStats -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ >Homer_FearConditioning_5hmC_mm10_exonboundaries_ComprehensiveComparison_2 &
 ```
 
-_Scatterplots_
+*Scatterplots*
 
 HC vs HC, FC, HC_unique, FC_unique
 ```
