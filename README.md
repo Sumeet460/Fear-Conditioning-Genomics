@@ -538,7 +538,7 @@ CTCFPeaksClustered: dataset from Victor Corces or all CTCF binding sites genome 
 ```
 findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/CTCFPeaksClustered.bed mm10 CTCFPeaksClustered_motifs/ -size 700 -mis 2 -S 25 -p 25 -h &
 ```
-
+```
 Other Analyses
  -FindMotifs/5hmC-Seq/FC_5hmC_Inc
  -FindMotifs/5hmC-Seq/FC_5hmC_Dec
@@ -587,7 +587,7 @@ More Other analyses:
  -FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_introns_Dec
  -FindMotifs/5hmC-Seq_Enhancers/5hmC_Enhancers_overlap
  -FindMotifs/5hmC-Seq_CTCF/5hmC_CTCF_overlap
-
+```
 
 ###9. 5HMC ENRICHMENT ANALYSIS:HOMER:HISTOGRAMS AND SCATTERPLOTS: MOTIFS, PROMOTERS, EXONS, INTRONS, EXONS-INTRONS, CTCF, OTHER GENOMIC REGIONS (CPG ISLANDS, EXONS, LNCRNA, PSEUDOGENES, LOW COMPLEXITY REGIONS, SIMPLE REPEATS, SINES, SATELLITES
 
@@ -622,6 +622,7 @@ Two methods:
   -may be best option - seq2profile doesn't appear to produce the same profile, as is displayed on URL; also the .motif profiles form seq2profile appear much less complex
   
 TFs of interest and their consensus sequences:
+```
 | Gene | Consensus Motif|
 --------|---------------
 HIF-1b	| RTACGTGC
@@ -631,7 +632,7 @@ Maz | GGGGGGGG
 Stat3 (control) | CTTCCGGGAA
 HRE(HSF)	| TTCTAGAABNTTCTA
 PRDM1/Blimp1	| ACTTTCACTTTC
-
+```
 
 seq2motif: creating .motif files - least stringent: *2* mismatches allowed
 ```
