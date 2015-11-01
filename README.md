@@ -622,17 +622,17 @@ Two methods:
   -may be best option - seq2profile doesn't appear to produce the same profile, as is displayed on URL; also the .motif profiles form seq2profile appear much less complex
   
 TFs of interest and their consensus sequences:
-```
-| Gene | Consensus Motif|
---------|---------------
+
+Gene | Consensus Motif
+--------|------------
 HIF-1b	| RTACGTGC
 c-Myc |	VVCCACGTGG
-n-Myc	| VRCCACGTGG
+n-Myc | VRCCACGTGG
 Maz | GGGGGGGG
-Stat3 (control) | CTTCCGGGAA
-HRE(HSF)	| TTCTAGAABNTTCTA
-PRDM1/Blimp1	| ACTTTCACTTTC
-```
+Stat3 | CTTCCGGGAA
+HRE (HSF) | TTCTAGAABNTTCTA
+PRDM1/Blimp1 | ACTTTCACTTTC
+
 
 seq2motif: creating .motif files - least stringent: *2* mismatches allowed
 ```
