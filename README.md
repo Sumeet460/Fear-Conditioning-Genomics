@@ -146,8 +146,6 @@ IMMO-FC Differential expression analysis: using only repeat masked gtf
 cuffdiff -o ./AmygHC_vs_AmygIMMO-FC_RepeatMasked_SMALL -L HC,IMMO-FC -p 25 -u /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Annotation/mm10_UCSC_RepeatMasked.gtf /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/19_Homecage_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/20_Homecage_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/21_Homecage_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/22_Homecage_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/23_Homecage_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/24_Homecage_Aligned.sortedByCoord.out.bam /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/1_IMMO-FC_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/2_IMMO-FC_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/3_IMMO-FC_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/4_IMMO-FC_Aligned.sortedByCoord.out.bam 
 ```
 
-
-
 FC Differential expression analysis: using only repeat masked gtf
 ```
 cuffdiff -o ./AmygFC_vs_AmygHC_RepeatMasked_SMALL -L HC,FC -p 25 -u /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Annotation/mm10_UCSC_RepeatMasked.gtf /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/19_Homecage_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/20_Homecage_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/21_Homecage_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/22_Homecage_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/23_Homecage_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/24_Homecage_Aligned.sortedByCoord.out.bam /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/10_FC-Alone_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/11_FC-Alone_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/12_FC-Alone_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/8_FC-Alone_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/9_FC-Alone_Aligned.sortedByCoord.out.bam &
@@ -345,6 +343,7 @@ bedtools intersect -a /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hm
 #bedtools/RNAseq_wholegene/5hmC_Dec
 bedtools intersect -a /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_wholegene_ALL_sorted.bed -b /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_AllDynamic5hmC_sorted.bed -v -bed -wb >HCvsFC_RNAseq_wholegene_5hmC_all.bed
 ```
+```
 MISCELLANEOUS IDEAS
  -bedtools/RNAseq_all/5hmCseq_genes_TSS_all
  -bedtools/RNAseq_all/5hmCseq_genes_TSS_all
@@ -375,21 +374,22 @@ Other interesting coordinate sets to generate
  -RNAseq and TRAPSeq
  -5hmCseq and enhancers
  -5hmCseq and insulators
+```
 
 ###7. ANNOTATION ANALYSIS:HOMER
+```
  -HCvsFC_5hmCseq_Inc
  -HCvsFC_5hmCseq_Dec
  -HCvsFC_5hmCseq_ALL
  -HCvsFC RNAseq
  -HCvsFC 5hmC & RNAseq overlap
  -HCvsFC TRAPseq: unique and distinct from regular RNAseq
- 
+```
 
 ORDER OF ANNOTATION ENRICHMENT CHANGE (HC > FC)
 intron>exon>intergenic>LTR~>promoter
 
 Python Script for Homer Annotations
-
 ```
 import os
 import fnmatch
@@ -470,12 +470,13 @@ Awk script to determine average size of regions in a bed file
 ```
 cat CTCFPeaksClustered.bed | awk -F'\t' 'BEGIN{SUM=0}{ SUM+=$3-$2 }END{print SUM}'
 ```
+```
 _Average size of each region in bed file:_
  -RNAseq Introns: 15000 (avg was 8800)
  -RNAseq exons: 3000 (avg 325)
  -CTCFPeaksClustered = 500 (avg 362)
 Overshooting may be better than under
-
+```
 *Motif Finding:*
 
 _RNAseq, whole gene, upregulated_
@@ -733,10 +734,10 @@ cat Maz_HC_unique.bed Maz_FC_unique.bed > Maz_motifs_all.bed
 cat Stat3_motifs_HC_unique.txt Stat3_motifs_FC_unique.txt > Stat3_motifs_all.bed
 ```
 
-_D) Find intensity of epigenetic marks at predetermined set of motif binding sites (as from #2) using annotatepeaks -hist -d to feed in tag directories. Can do this with any predetermined set of coordinates (i.e. RNAseq exon boundaries, promoters, etc)_
+**D) Find intensity of epigenetic marks at predetermined set of motif binding sites (as from #2) using annotatepeaks -hist -d to feed in tag directories. Can do this with any predetermined set of coordinates (i.e. RNAseq exon boundaries, promoters, etc)**
 
 *5hmC distribution comparison:*
-_Histograms_
+*Histograms*
 
 HIF1b binding sites in ALL DhMRs
 ```
