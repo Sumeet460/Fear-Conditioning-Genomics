@@ -394,212 +394,253 @@ Other interesting coordinate sets to generate
 ORDER OF ANNOTATION ENRICHMENT CHANGE (HC > FC)
 intron>exon>intergenic>LTR~>promoter
 
+Python Script for Homer Annotations
+
+```
+import os
+import fnmatch
+import pybedtools
+ 
+ 
+InputGeneNames = open('FXTAS.SCA7.WT.common.DhMR.Homer.txt','r')
+GeneFileGTF = open('/home/byao/homer/data/accession/mouse2gene.tsv','r')
+GeneList = {}
+AccessionNumbers = {}
+ 
+for line in GeneFileGTF:
+	line = line.strip()
+	try:
+		RefSeqID, Unknown, HsID, Accession, EnsemblID, Unknown2, GeneID = line.split('\t')
+		GeneList[str(RefSeqID)] = GeneID
+	except:
+		pass
+ 
+ 
+ 
+ 
+for line in InputGeneNames:
+    line = line.strip()
+    PeakID, Chr, Start, End, Strand, PeakScore, Focus, Ratio_Region, Remainder = line.split('\t',8)
+    try:
+        Region, Remainder = Ratio_Region.split('(')
+        try:
+            Accession, Remainder = Remainder.split(',')
+            OutputLine = str(Chr) + '\t' + str(Start) + '\t' + str(End) + '\t' + str(Ratio_Region)
+            AccessionNumbers[str(Accession)] = OutputLine
+        except:
+            Accession, Remainder = Remainder.split(')')
+            OutputLine = str(Chr) + '\t' + str(Start) + '\t' + str(End) + '\t' + str(Ratio_Region)
+            AccessionNumbers[str(Accession)] = OutputLine
+    except:
+        pass
+ 
+ 
+for AccessionNumber in AccessionNumbers.keys():
+    try:
+        print str(AccessionNumbers[str(AccessionNumber)]) + '\t' + str(GeneList[str(AccessionNumber)])
+    except:
+        print str(AccessionNumber) + ' is missing'
+
+
+```
 
 
 ###8. MOTIF ANALYSIS:HOMER:MOTIF ID AND LOCALIZATION
 
-FindMotifs/5hmC-Seq/FC_5hmC_Inc
-FindMotifs/5hmC-Seq/FC_5hmC_Dec
-FindMotifs/5hmC-Seq/FC_5hmC_Common_Inc
-FindMotifs/5hmC-Seq/FC_5hmC_Common_Dec
+*Background* Files are critical - they are how homer decides which TF sites are overrepresented
+wholegene - mm10 all genes
+exons - mm10 all exons
+introns - mm10 all introns
+5hmC regions - random sequences from the genome
 
-FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_wholegene_Inc
-FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_wholegene_Dec
-FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_wholegene_Inc
-FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_wholegene_Dec
+Testing out different -size parameters (avg size of the DNA fragments in the BED file - input into the findmotifs script)
+size 2000
+```
+findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/FC_RNAseq_expandedcoordinates.bed mm10 HCvsFC_RNAseq_wholegene_motifs_2k/ -size 2000 -mis 1 -S 10 -p 25 -bg /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/background_files/mm10_allgenes_background.bed -h &
+```
+size 100000
+```
+findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/FC_RNAseq_expandedcoordinates.bed mm10 HCvsFC_RNAseq_wholegene_motifs_100k/ -size 100000 -mis 1 -S 25 -p 25 -bg /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/background_files/mm10_allgenes_background.bed -h &
+```
+size 10000
+```
+findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/FC_RNAseq_expandedcoordinates.bed mm10 HCvsFC_RNAseq_wholegene_motifs_10k/ -size 10000 -mis 1 -S 10 -p 25 -bg /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/background_files/mm10_allgenes_background.bed -h &
+```
+size 50000
+```
+findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/FC_RNAseq_expandedcoordinates.bed mm10 HCvsFC_RNAseq_wholegene_motifs_50k/ -size 50000 -mis 1 -S 10 -p 25 -bg /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/background_files/mm10_allgenes_background.bed -h &
+```
+*Conclusion about -size parameter:* having a size closer to the real average length of the regions in the bedfile makes for more statistically significant results, but much longer run time. 100k size failed to finish.
 
-FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_promoter_Inc
-FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_promoter_Dec
-FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_promoter_Inc
-FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_promoter_Dec
+Awk script to determine average size of regions in a bed file
+```
+cat CTCFPeaksClustered.bed | awk -F'\t' 'BEGIN{SUM=0}{ SUM+=$3-$2 }END{print SUM}'
+```
+_Average size of each region in bed file:_
+ -RNAseq Introns: 15000 (avg was 8800)
+ -RNAseq exons: 3000 (avg 325)
+ -CTCFPeaksClustered = 500 (avg 362)
+Overshooting may be better than under
 
-FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_exons_Inc
-FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_exons_Dec
-FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_exons_Inc
-FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_exons_Dec
+*Motif Finding:*
 
-FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_introns_Inc
-FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_introns_Dec
-FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_introns_Inc
-FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_introns_Dec
+_RNAseq, whole gene, upregulated_
+```
+findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_wholegene_upregulated.bed mm10 HCvsFC_RNAseq_wholegene_upregulated_motifs/ -size 50000 -mis 2 -S 25 -p 25 -bg /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/background_files/mm10_allgenes_background.bed -h &
+```
+_RNAseq, whole gene, downregulated_
+```
+findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_wholegene_downregulated.bed mm10 HCvsFC_RNAseq_wholegene_downregulated_motifs/ -size 50000 -mis 2 -S 25 -p 25 -bg /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/background_files/mm10_allgenes_background.bed -h &
+```
+_RNAseq, promoters, all differentially expressed (DE)_
+```
+findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_promoters_ALL.bed mm10 HCvsFC_RNAseq_promoters_motifs/ -size 2000 -mis 2 -S 25 -p 25 -bg /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/background_files/mm10_allpromoters_-2000_background.bed -h &
+```
+_RNAseq, promoters, upregulated (DE)_
+```
+findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_promoter_upregulated.bed mm10 HCvsFC_RNAseq_promoter_upregulated_motifs/ -size 2000 -mis 2 -S 25 -p 25 -bg /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/background_files/mm10_allpromoters_-2000_background.bed -h &
+```
+_RNAseq, promoters, downregulated_
+```
+findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_promoters_downregulated.bed mm10 HCvsFC_RNAseq_promoter_downregulated_motifs/ -size 2000 -mis 2 -S 25 -p 25 -bg /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/background_files/mm10_allpromoters_-2000_background.bed -h &
+```
+_RNAseq, introns, all differentially expressed (DE)_
+```
+findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_introns_ALL.bed mm10 HCvsFC_RNAseq_intron_motifs/ -size 15000 -mis 2 -S 25 -p 25 -bg /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/background_files/mm10_allintrons_background.bed -h &
+```
+_RNAseq, introns, upregulated_
+```
+findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_introns_upregulated.bed mm10 HCvsFC_RNAseq_intron_upregulated_motifs/ -size 15000 -mis 2 -S 25 -p 25 -bg /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/background_files/mm10_allintrons_background.bed -h &
+```
+_RNAseq, introns, downregulated_
+```
+findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_introns_downregulated.bed mm10 HCvsFC_RNAseq_intron_downregulated_motifs/ -size 15000 -mis 2 -S 25 -p 25 -bg /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/background_files/mm10_allintrons_background.bed -h &
+```
+_RNAseq, exons, all DE_
+```
+findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_exons_ALL.bed mm10 HCvsFC_RNAseq_exon_motifs/ -size 3000 -mis 2 -S 25 -p 25 -bg /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/background_files/mm10_allexons_background.bed -h &
+```
+_RNAseq, exons, upregulated_
+```
+findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_exons_upregulated.bed mm10 HCvsFC_RNAseq_exon_upregulated_motifs/ -size 3000 -mis 2 -S 25 -p 25 -bg /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/background_files/mm10_allexons_background.bed -h &
+```
+_RNAseq, exons, downregulated_
+```
+findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_exons_downregulated.bed mm10 HCvsFC_RNAseq_exon_downregulated_motifs/ -size 3000 -mis 2 -S 25 -p 25 -bg /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/background_files/mm10_allexons_background.bed -h &
+```
+_5hmC peaks, all DhMRs_
+```_
+findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/HCvsFC_AllDHMR.bed mm10 HCvsFC_5hmC_motifs/ -size 700 -mis 2 -S 25 -p 25 -h &
+```
+_5hmC peaks, 5hmC Increased_
+```
+findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/HCvsFC_5hmC_Inc_increment.bed mm10 HCvsFC_5hmC_Inc_motifs/ -size 700 -mis 2 -S 25 -p 25 -h &
+```
+_5hmC peaks, 5hmC Decreased_
+```
+findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/HCvsFC_5hmC_Dec_increment.bed mm10 HCvsFC_5hmC_Dec_motifs/ -size 700 -mis 2 -S 25 -p 25 -h &
+```
+CTCFPeaksClustered: dataset from Victor Corces or all CTCF binding sites genome wide
+```
+findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/CTCFPeaksClustered.bed mm10 CTCFPeaksClustered_motifs/ -size 700 -mis 2 -S 25 -p 25 -h &
+```
 
-FindMotifs/5hmC-Seq_Enhancers/5hmC_Enhancers_overlap
-FindMotifs/5hmC-Seq_CTCF/5hmC_CTCF_overlap
+Other Analyses
+ -FindMotifs/5hmC-Seq/FC_5hmC_Inc
+ -FindMotifs/5hmC-Seq/FC_5hmC_Dec
+ -FindMotifs/5hmC-Seq/FC_5hmC_Common_Inc
+ -FindMotifs/5hmC-Seq/FC_5hmC_Common_Dec
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_wholegene_Inc
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_wholegene_Dec
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_wholegene_Inc
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_wholegene_Dec
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_promoter_Inc
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_promoter_Dec
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_promoter_Inc
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_promoter_Dec
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_exons_Inc
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_exons_Dec
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_exons_Inc
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_exons_Dec
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_introns_Inc
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_introns_Dec
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_introns_Inc
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_introns_Dec
+ -FindMotifs/5hmC-Seq_Enhancers/5hmC_Enhancers_overlap
+ -FindMotifs/5hmC-Seq_CTCF/5hmC_CTCF_overlap
+ -FindMotifs/CTCF Clustered Peaks
 
-Tag Directories of 5hmC BAM files to calculate enrichment of 5hmC at loci specified in BED format
+More Other analyses:
+ -FindMotifs/5hmC-Seq/FC_5hmC_Inc
+ -FindMotifs/5hmC-Seq/FC_5hmC_Dec
+ -FindMotifs/5hmC-Seq/FC_5hmC_Common_Inc
+ -FindMotifs/5hmC-Seq/FC_5hmC_Common_Dec
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_wholegene_Inc
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_wholegene_Dec
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_wholegene_Inc
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_wholegene_Dec
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_promoter_Inc
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_promoter_Dec
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_promoter_Inc
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_promoter_Dec
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_exons_Inc
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_exons_Dec
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_exons_Inc
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_exons_Dec
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_introns_Inc
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_introns_Dec
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_introns_Inc
+ -FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_introns_Dec
+ -FindMotifs/5hmC-Seq_Enhancers/5hmC_Enhancers_overlap
+ -FindMotifs/5hmC-Seq_CTCF/5hmC_CTCF_overlap
+
+
+###9. 5HMC ENRICHMENT ANALYSIS:HOMER:HISTOGRAMS AND SCATTERPLOTS: MOTIFS, PROMOTERS, EXONS, INTRONS, EXONS-INTRONS, CTCF, OTHER GENOMIC REGIONS (CPG ISLANDS, EXONS, LNCRNA, PSEUDOGENES, LOW COMPLEXITY REGIONS, SIMPLE REPEATS, SINES, SATELLITES
+
+*Workflow*
+A) Create tag directories -> containers with all of the bam file reads (from all replicates) in one container - used to pileup all the reads from one condition in order to get a comprehensive picture of the density of reads in particular loci
+B) Create a .motif file using seq2profile, or download the .motif file from http://homer.salk.edu/homer/custom.motifs
+C) Predict sites where the TF will bind in a set of coordinates using annotatepeaks -m -mbed 
+D) Find intensity of epigenetic marks at predetermined set of motif binding sites (as from #2) using annotatepeaks -hist -d to feed in tag directories. Can do this with any predetermined set of coordinates (i.e. RNAseq exon boundaries, promoters, etc)
+
+_A) Create tag directories -> containers with all of the bam file reads (from all replicates) in one container - used to pileup all the reads from one condition in order to get a comprehensive picture of the density of reads in particular loci_
+*Tag Directories* of 5hmC BAM files to calculate enrichment of 5hmC at loci specified in BED format
 makeTagDirectory <Output Dir name> [options] <alignment file1> <"2> <etc>
 
-#makeTagDirectory/HC
+HC
+```
 makeTagDirectory HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs/Sample_HC1.bam /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs/Sample_HC2.bam
-
-#makeTagDirectory/FC
+```
+FC
+```
 makeTagDirectory FC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs/Sample_FC1.bam /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs/Sample_FC2.bam &
-
-#makeTagDirectory/Input
+```
+Input
+```
 makeTagDirectory Input_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs/Sample_InputHC1.bam &
+```
+_B) Create a .motif file using seq2profile, or download the .motif file from http://homer.salk.edu/homer/custom.motifs_
 
+Obtaining .motif files: contain the consensus sequence and the frequency distribution of each nucleotide in the consensue
+Two methods:
+ -use seq2profile to create .motif file form within Homer
+ -download pre-made consensus motif from Homer: http://homer.salk.edu/homer/custom.motifs 
+  -may be best option - seq2profile doesn't appear to produce the same profile, as is displayed on URL; also the .motif profiles form seq2profile appear much less complex
+  
+TFs of interest and their consensus sequences:
+| Gene | Consensus Motif|
+-------------------------
+HIF-1b	| RTACGTGC
+c-Myc |	VVCCACGTGG
+n-Myc	| VRCCACGTGG
+Maz | GGGGGGGG
+Stat3 (control) | CTTCCGGGAA
+HRE(HSF)	| TTCTAGAABNTTCTA
+PRDM1/Blimp1	| ACTTTCACTTTC
+---------------------------
 
-
-###Annotate motifs in the promoters, exons, and introns of the upregulated RNA-seq genes
-
-##Background Files
-#wholegene - mm10 all genes
-#exons - mm10 all exons
-#introns - mm10 all introns
-#5hmC regions - random sequences from the genome
-
-##FindMotifs/RNAseq/wholegene/all
-
-#testing out different -size parameters (avg size of the DNA in the BED file)
-findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/FC_RNAseq_expandedcoordinates.bed mm10 HCvsFC_RNAseq_wholegene_motifs_2k/ -size 2000 -mis 1 -S 10 -p 25 -bg /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/background_files/mm10_allgenes_background.bed -h &
-
-findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/FC_RNAseq_expandedcoordinates.bed mm10 HCvsFC_RNAseq_wholegene_motifs_100k/ -size 100000 -mis 1 -S 25 -p 25 -bg /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/background_files/mm10_allgenes_background.bed -h &
-
-findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/FC_RNAseq_expandedcoordinates.bed mm10 HCvsFC_RNAseq_wholegene_motifs_10k/ -size 10000 -mis 1 -S 10 -p 25 -bg /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/background_files/mm10_allgenes_background.bed -h &
-
-findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/FC_RNAseq_expandedcoordinates.bed mm10 HCvsFC_RNAseq_wholegene_motifs_50k/ -size 50000 -mis 1 -S 10 -p 25 -bg /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/background_files/mm10_allgenes_background.bed -h &
-
-#Conclusion about  -size parameter: having a size closer to the real average length of the regions in the bedfile makes for more statistically significant results, but much longer run time. 100k size failed to finish.
-#Awk script to determine average size of regions in a bed file
-cat CTCFPeaksClustered.bed | awk -F'\t' 'BEGIN{SUM=0}{ SUM+=$3-$2 }END{print SUM}'
-#RNAseq Introns: 15000 (avg was 8800)
-#RNAseq exons: 3000 (avg 325)
-#CTCFPeaksClustered = 500 (avg 362)
-#Overshooting may be better than under
-#HCvsFC_5hmC_Dec
-#HCvsFC_5hmC_Inc
-#HCvsFC_5hmC_All
-
-#FindMotifs/RNAseq/wholegene/upreg
-findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_wholegene_upregulated.bed mm10 HCvsFC_RNAseq_wholegene_upregulated_motifs/ -size 50000 -mis 2 -S 25 -p 25 -bg /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/background_files/mm10_allgenes_background.bed -h &
-
-#FindMotifs/RNAseq/wholegene/downreg
-findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_wholegene_downregulated.bed mm10 HCvsFC_RNAseq_wholegene_downregulated_motifs/ -size 50000 -mis 2 -S 25 -p 25 -bg /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/background_files/mm10_allgenes_background.bed -h &
-
-##Promoter Motifs
-
-#FindMotifs/RNAseq/promoters/all
-findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_promoters_ALL.bed mm10 HCvsFC_RNAseq_promoters_motifs/ -size 2000 -mis 2 -S 25 -p 25 -bg /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/background_files/mm10_allpromoters_-2000_background.bed -h &
-
-#FindMotifs/RNAseq/promoters/upreg
-findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_promoter_upregulated.bed mm10 HCvsFC_RNAseq_promoter_upregulated_motifs/ -size 2000 -mis 2 -S 25 -p 25 -bg /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/background_files/mm10_allpromoters_-2000_background.bed -h &
-
-#FindMotifs/RNAseq/promoters/downreg
-findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_promoters_downregulated.bed mm10 HCvsFC_RNAseq_promoter_downregulated_motifs/ -size 2000 -mis 2 -S 25 -p 25 -bg /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/background_files/mm10_allpromoters_-2000_background.bed -h &
-
-##Intron motifs
-
-#FindMotifs/RNAseq/introns/all
-findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_introns_ALL.bed mm10 HCvsFC_RNAseq_intron_motifs/ -size 15000 -mis 2 -S 25 -p 25 -bg /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/background_files/mm10_allintrons_background.bed -h &
-
-#FindMotifs/RNAseq/introns/upreg
-findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_introns_upregulated.bed mm10 HCvsFC_RNAseq_intron_upregulated_motifs/ -size 15000 -mis 2 -S 25 -p 25 -bg /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/background_files/mm10_allintrons_background.bed -h &
-
-#FindMotifs/RNAseq/introns/downreg
-findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_introns_downregulated.bed mm10 HCvsFC_RNAseq_intron_downregulated_motifs/ -size 15000 -mis 2 -S 25 -p 25 -bg /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/background_files/mm10_allintrons_background.bed -h &
-
-##Exon Motifs
-
-#FindMotifs/RNAseq/exons/all
-findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_exons_ALL.bed mm10 HCvsFC_RNAseq_exon_motifs/ -size 3000 -mis 2 -S 25 -p 25 -bg /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/background_files/mm10_allexons_background.bed -h &
-
-#FindMotifs/RNAseq/exons/upreg
-findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_exons_upregulated.bed mm10 HCvsFC_RNAseq_exon_upregulated_motifs/ -size 3000 -mis 2 -S 25 -p 25 -bg /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/background_files/mm10_allexons_background.bed -h &
-
-#FindMotifs/RNAseq/exons/downreg
-findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_exons_downregulated.bed mm10 HCvsFC_RNAseq_exon_downregulated_motifs/ -size 3000 -mis 2 -S 25 -p 25 -bg /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/background_files/mm10_allexons_background.bed -h &
-
-
-
-#5hmC Peak Motifs
-
-#FindMotifs/5hmC_All
-findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/HCvsFC_AllDHMR.bed mm10 HCvsFC_5hmC_motifs/ -size 700 -mis 2 -S 25 -p 25 -h &
-
-#FindMotifs/5hmC_Inc
-findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/HCvsFC_5hmC_Inc_increment.bed mm10 HCvsFC_5hmC_Inc_motifs/ -size 700 -mis 2 -S 25 -p 25 -h &
-
-#FindMotifs/5hmC_Dec
-findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/HCvsFC_5hmC_Dec_increment.bed mm10 HCvsFC_5hmC_Dec_motifs/ -size 700 -mis 2 -S 25 -p 25 -h &
-
-
-
-
-
-#FindMotifs/5hmC-Seq/FC_5hmC_Inc
-#FindMotifs/5hmC-Seq/FC_5hmC_Dec
-#FindMotifs/5hmC-Seq/FC_5hmC_Common_Inc
-#FindMotifs/5hmC-Seq/FC_5hmC_Common_Dec
-
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_wholegene_Inc
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_wholegene_Dec
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_wholegene_Inc
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_wholegene_Dec
-
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_promoter_Inc
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_promoter_Dec
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_promoter_Inc
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_promoter_Dec
-
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_exons_Inc
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_exons_Dec
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_exons_Inc
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_exons_Dec
-
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_introns_Inc
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Inc_RNAseq_introns_Dec
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_introns_Inc
-#FindMotifs/5hmC-Seq_RNAseq/5hmC_Dec_RNAseq_introns_Dec
-
-#FindMotifs/5hmC-Seq_Enhancers/5hmC_Enhancers_overlap
-#FindMotifs/5hmC-Seq_CTCF/5hmC_CTCF_overlap
-#FindMotifs/CTCF Clustered Peaks
-findMotifsGenome.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/CTCFPeaksClustered.bed mm10 CTCFPeaksClustered_motifs/ -size 700 -mis 2 -S 25 -p 25 -h &
-
-
-###Scatterplots in Homer
-
-
-#Compare significant RNAseq genomic loci with each dataset: RNAseq promoters
-annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_RNAseq_promoters.bed mm10 -size 1000 -log -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ >Homer_FearConditioning_5hmC_FC_RNAseq_promoters_ComprehensiveComparison 
-
-#RNAseq exons
-annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_RNAseq_exons.bed mm10 -size 1000 -fragLength 150 -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/  >Homer_FearConditioning_5hmC_FC_RNAseq_exons_ComprehensiveComparison_2 &
-
-#RNAseq introns
-annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_RNAseq_introns.bed mm10 -size 1000 -p 10 -annStats Homer_FC_unique_annStats -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ >Homer_FearConditioning_5hmC_FC_RNAseq_introns_ComprehensiveComparison_2 &
-
-#CTCF binding sites
-annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/CTCFPeaksClustered.bed mm10 -size 1000 -fragLength 150 -annStats Homer_CTCFPeaksClustered_annStats -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ >Homer_FearConditioning_5hmC_CTCFPeaksClustered_ComprehensiveComparison_2 & 
-
-#lncRNAs
-annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_lncRNA.bed mm10 -size 1000 -fragLength 150 -annStats Homer_FC_lncRNA_annStats -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ >Homer_FearConditioning_5hmC_FC_lncRNA_ComprehensiveComparison_2 &
-
-#enhancers: cell based
-annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/enhancers_primarycell_based.bed mm10 -size 1000 -fragLength 150 -annStats Homer_enhancers_primarycell_based_annStats -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ >Homer_FearConditioning_5hmC_enhancers_primarycell_based_ComprehensiveComparison_2 &
-
-#enhancers: tissue based
-annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/enhancers_tissue_based.bed mm10 -size 1000 -fragLength 150 -annStats Homer_enhancers_tissue_based_annStats -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ >Homer_FearConditioning_5hmC_enhancers_tissue_based_ComprehensiveComparison_2 &
-
-#exon boundaries: +/- 50 bp from exons
-annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/mm10_exonboundaries.bed mm10 -size 1000 -fragLength 150 -annStats Homer_mm10_exonboundaries_annStats -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ >Homer_FearConditioning_5hmC_mm10_exonboundaries_ComprehensiveComparison_2 &
-
-
-
-###Finding instances of motifs 
-1) Create a .motif file using seq2profile, or download the .motfi file from http://homer.salk.edu/homer/custom.motifs
-2) Predict sites where the TF will bind in a set of coordinates using annotatepeaks -m -mbed 
-3) Find intensity of epigenetic marks at predetermined set of motif binding sites (as from #2) using annotatepeaks -hist -d to feed in tag directories
-
-HIF-1b	RTACGTGC
-c-Myc	VVCCACGTGG
-n-Myc	VRCCACGTGG
-Maz     GGGGGGGG
-Stat3 (control)	CTTCCGGGAA
-HRE(HSF)	TTCTAGAABNTTCTA
-PRDM1/Blimp1	ACTTTCACTTTC
-
-##creating .motif files - least stringent: 2 mismatches allowed
+seq2motif: creating .motif files - least stringent: *2* mismatches allowed
+```
 seq2profile.pl RTACGTGC 2 HIF-1b > HIF-1b.motif
 seq2profile.pl VVCCACGTGG 2 c-Myc > c-Myc.motif
 seq2profile.pl VRCCACGTGG 2 n-Myc > n-Myc.motif
@@ -607,168 +648,239 @@ seq2profile.pl GGGGGGGG 2 Maz > Maz_2.motif
 seq2profile.pl CTTCCGGGAA 2 Stat3 > Stat3.motif
 seq2profile.pl TTCTAGAABNTTCTA 2 HRE > HRE.motif
 seq2profile.pl ACTTTCACTTTC 2 PRDM1 > PRDM1_2.motif
-
-##creating .motif files -  medium stringent: 1 mismatches allowed
+```
+creating .motif files -  medium stringent: *1* mismatches allowed
+```
 seq2profile.pl ACTTTCACTTTC 1 PRDM1 > PRDM1_1.motif
-
-##creating .motif files - most stringent: 0 mismatches allowed
+```
+creating .motif files - most stringent: *0* mismatches allowed
+```
 seq2profile.pl ACTTTCACTTTC 0 PRDM1 > PRDM1_0.motif
+```
 
+_C) Predict sites where the TF will bind in a set of coordinates using annotatepeaks -m -mbed_
 
-###making histograms of 5-hmC near motifs
-##HC_unique
-#HIF-1b
+_5hmC decreases/HC unique peaks_
+HIF-1b
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/HC_unique.bed mm10 -size 1000 -m HIF-1b.motif -mbed HIF-1b_HC_unique.bed -hist 10 > HIF_motifs_HC_unique.txt
-
-#c-Myc
+```
+c-Myc 
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/HC_unique.bed mm10 -size 1000 -m c-Myc.motif -mbed c-Myc_HC_unique.bed > c-Myc_motifs_HC_unique.txt &
-
-#n-Myc
+```
+n-Myc
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/HC_unique.bed mm10 -size 1000 -m n-Myc.motif -mbed n-Myc_HC_unique.bed > n-Myc_motifs_HC_unique.txt &
-
-#Maz
+```
+Maz
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/HC_unique.bed mm10 -size 1000 -m Maz.motif -mbed Maz_HC_unique.bed > Maz_motifs_HC_unique.txt &
-
-#Stat3 (control)
+```
+Stat3
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/HC_unique.bed mm10 -size 1000 -m Stat3.motif -mbed Stat3_HC_unique.bed > Stat3_motifs_HC_unique.txt &
+```
 
-
-##FC_unique
-#HIF-1b
+_5hmC increases/FC unique peaks_
+HIF-1b
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_unique.bed mm10 -size 1000 -m HIF-1b.motif -mbed HIF-1b_FC_unique.bed -hist 10 > HIF_motifs_FC_unique.txt
-
-#c-Myc
+```
+c-Myc
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_unique.bed mm10 -size 1000 -m c-Myc.motif -mbed c-Myc_FC_unique.bed > c-Myc_motifs_FC_unique.txt &
-
-#n-Myc
+```
+n-Myc
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_unique.bed mm10 -size 1000 -m n-Myc.motif -mbed n-Myc_FC_unique.bed > n-Myc_motifs_FC_unique.txt &
-
-#Maz
+```
+Maz
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_unique.bed mm10 -size 1000 -m Maz.motif -mbed Maz_FC_unique.bed > Maz_motifs_FC_unique.txt &
-
-#Stat3
+```
+Stat3
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_unique.bed mm10 -size 1000 -m Stat3.motif -mbed Stat3.motif_FC_unique.bed > Stat3_motifs_FC_unique.txt &
-
+```
+_All mm10 annotated promoters (UCSC)_
+Stat3
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/mm10_allpromoters_-2000_background.bed mm10 -size 1000 -m Stat3.motif -mbed Stat3.motif_mm10_promoters.bed > Stat3_motifs_mm10_promoters.txt &
-
-#HRE (control)
+```
+HRE (control)
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/mm10_allpromoters_-2000_background.bed mm10 -size 1000 -m HRE.motif -mbed HRE.motif_mm10_promoters.bed > HRE_motifs_mm10_promoters.txt &
+```
 
-
-#Maz in the RNAseq promoters
-#Using new .motif file
+_RNAseq promoters_
+Maz - Using different .motif file
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_RNAseq_promoters.bed mm10 -size 1000 -m Maz.motif -mbed Maz_RNAseq_promoters.bed > Maz_motifs_RNAseq_promoters_2.txt &
-
-#PRDM1/RNAseq promoters
+```
+PRDM1
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/FC_RNAseq_promoters.bed mm10 -size 2000 -m PRDM1.motif -mbed PRDM1_RNAseq_promoters.bed > PRDM1_motifs_RNAseq_promoters.txt &
-
-#PRDM1/upregulated RNAseq promoters
+```
+_RNAseq promoters - upregulated_
+PRDM1
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/FC_RNAseq_promoters_upregulated.bed mm10 -size 2000 -m PRDM1.motif -mbed PRDM1_RNAseq_promoters_upreg.bed > PRDM1_motifs_RNAseq_promoters_upreg.txt &
+```
 
-
-##Concatenate all HIF-1a binding sites in both HC_unique and FC_unique peaks
+Concatenate all binding sites in both HC_unique and FC_unique peaks
+Alternatively, could've searched for motifs in concatenated HC anf FC peaks first
+```
 cat HIF-1b_HC_unique.bed HIF-1b_FC_unique.bed > HIF_motifs_all.bed
 cat c-Myc_HC_unique.bed c-Myc_FC_unique.bed > c-Myc_motifs_all.bed
 cat n-Myc_HC_unique.bed n-Myc_FC_unique.bed > n-Myc_motifs_all.bed
 cat Maz_HC_unique.bed Maz_FC_unique.bed > Maz_motifs_all.bed
 cat Stat3_motifs_HC_unique.txt Stat3_motifs_FC_unique.txt > Stat3_motifs_all.bed
+```
 
+_D) Find intensity of epigenetic marks at predetermined set of motif binding sites (as from #2) using annotatepeaks -hist -d to feed in tag directories. Can do this with any predetermined set of coordinates (i.e. RNAseq exon boundaries, promoters, etc)_
 
-###Histograms in Homer
-##5-hmC in HC vs FC centered around these motifs
-#HIF1b binding sites
+*5hmC distribution comparison:*
+_Histograms_
+
+HIF1b binding sites in ALL DhMRs
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/motif_analysis/HIF_motifs_all.bed mm10 -size 1000 -m HIF-1b.motif -hist 10 -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ > HIF_motifs_hist_HC_FC.txt
-
-#c-Myc
+```
+c-Myc binding sites within ALL DhMRs
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/motif_analysis/c-Myc_motifs_all.bed mm10 -size 1000 -m c-Myc.motif -hist 10 -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ > c-Myc_motifs_hist_HC_FC.txt &
-
-
-#n-Myc
+```
+n-Myc binding sites within ALL DhMRs
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/motif_analysis/n-Myc_motifs_all.bed mm10 -size 1000 -m n-Myc.motif -hist 10 -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ > n-Myc_motifs_hist_HC_FC.txt &
-
-#Maz: in all 5-hmC peaks
+```
+Maz binding sites within ALL DhMRs
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/motif_analysis/Maz_motifs_all.bed mm10 -size 1000 -m Maz.motif -hist 10 -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ > Maz_motifs_hist_HC_FC.txt &
-
-#Maz: in all RNA-seq promoters
+```
+Maz binding sites within ALL RNAseq DE promoters
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/motif_analysis/Maz_RNAseq_promoters.bed mm10 -size 10 -m Maz.motif -hist 10 -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/Input_hMeDIP_BAMs_tag_directory/  >Maz_motifs_RNAseq_promoters_hist_HC_FC_Input_10Window.txt &
-
-#control 
+```
+Control - all mm10 genes, truncated
+```
 /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/ mm10 -size 1000 -hist 10 -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ >trunc_allgenes.bed_hist_HC_FC.txt &
-
-#Stat3
+```
+Stat3 binding sites within ALL mm10 promoters (UCSC)
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/motif_analysis/Stat3.motif_mm10_promoters.bed mm10 -size 1000 -m Stat3.motif -hist 10 -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ >Stat3_motifs_hist_mm10proms.txt &
-
-#HRE (HSF)
+```
+HRE (HSF) binding sites within all mm10 promoters
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/motif_analysis/HRE.motif_mm10_promoters.bed mm10 -size 1000 -m HRE.motif -hist 10 -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ >HRE_motifs_hist_mm10proms.txt &
-
-#PRDM1/RNAseq promoters/upregulated ##2 mismatches
+```
+PRDM1 binding sites within all mm10 promoters - 2 mismatches
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/motif_analysis/PRDM1_RNAseq_promoters_upreg.bed mm10 -size 1000 -m /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/motif_analysis/PRDM1.motif -hist 10 -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/Input_hMeDIP_BAMs_tag_directory/ >PRDM1_motifs_hist_mm10proms.txt &
- 
- #PRDM1 0 mismatches
- 
+ ```
+PRDM1 binding sites within all mm10 promoters - 0 mismatches
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/motif_analysis/PRDM1_RNAseq_promoters_upreg.bed mm10 -size 1000 -m /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/motif_analysis/PRDM1_0.motif -hist 10 -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/Input_hMeDIP_BAMs_tag_directory/ >PRDM1_0_motifs_hist_mm10proms.txt &
-
-annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/FC_RNAseq_promoters_upregulated.bed mm10 -size 2000 -m PRDM1.motif -mbed PRDM1_RNAseq_promoters_upreg.bed > PRDM1_motifs_RNAseq_promoters_upreg.txt &
-
-##RNA-seq
-#exon-boundaries
+```
+DE gene exon-boundaries (+/- 15 bp around boundary)
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/FC_RNAseq_exonboundaries.bed mm10 -size 1000 -hist 10 -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/Input_hMeDIP_BAMs_tag_directory/ >RNAseq_exon_boundaries_hist_HC_FC.txt &
-
-#Upregulated Promoters
+```
+Upregulated Promoters DE promoters
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/FC_upregulatedgenes_promoters.bed mm10 -size 1000 -hist 10 -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/Input_hMeDIP_BAMs_tag_directory/ >RNAseq_upregulated_promoters_hist_HC_FC_Input.txt &
-
-#Downregulated Promoters
+```
+Downregulated Promoters DE promoters
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/FC_downregulatedgenes_promoters.bed mm10 -size 1000 -hist 10 -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/Input_hMeDIP_BAMs_tag_directory/ >RNAseq_downregulated_promoters_hist_HC_FC_Input.txt &
-
-
-
-
-##Calculating Tag Densities Across Different Experiments for Scatterplots
-#Compare HC all peaks to everything else (HC, FC, HC_unique, FC_unique)
-annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/HC.bed mm10 -size 1000 -fragLength 150 -annStats Homer_HC_annStats -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_tag_directory /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_unique_hMeDIP_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_unique_hMeDIP_tag_directory/ >Homer_FearConditioning_5hmC_HC_ComprehensiveComparison &
-
-#Compare FC all peaks to everything else (HC, FC, HC_unique, FC_unique)
-annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC.bed mm10 -size 1000 -fragLength 150 -annStats Homer_FC_annStats -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_tag_directory /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_unique_hMeDIP_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_unique_hMeDIP_tag_directory/ >Homer_FearConditioning_5hmC_FC_ComprehensiveComparison &
-
-#Compare HC_unique all peaks to everything else (HC, FC, HC_unique, FC_unique)
-annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/HC_unique.bed mm10 -size 1000 -fragLength 150 -annStats Homer_HC_unique_annStats -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_tag_directory /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_unique_hMeDIP_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_unique_hMeDIP_tag_directory/ >Homer_FearConditioning_5hmC_HC_unique_ComprehensiveComparison &
-
-#Compare FC_unique all peaks to everything else (HC, FC, HC_unique, FC_unique)
-annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_unique.bed mm10 -size 1000 -fragLength 150 -annStats Homer_FC_unique_annStats -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_tag_directory /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_unique_hMeDIP_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_unique_hMeDIP_tag_directory/ >Homer_FearConditioning_5hmC_FC_unique_ComprehensiveComparison &
-
-#Compare significant RNAseq genomic loci with each dataset: RNAseq promoters
-annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_RNAseq_promoters.bed mm10 -size 1000 -fragLength 150 -annStats Homer_FC_unique_annStats -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ >Homer_FearConditioning_5hmC_FC_RNAseq_promoters_ComprehensiveComparison_2 &
-
-#RNAseq exons
+```
+All DE gene promoters
+```
+annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_RNAseq_promoters.bed mm10 -size 1000 -log -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ >Homer_FearConditioning_5hmC_FC_RNAseq_promoters_ComprehensiveComparison 
+```
+DE gene exons
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_RNAseq_exons.bed mm10 -size 1000 -fragLength 150 -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/  >Homer_FearConditioning_5hmC_FC_RNAseq_exons_ComprehensiveComparison_2 &
-
-#RNAseq introns
-annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_RNAseq_introns.bed mm10 -size 1000 -fragLength 150 -annStats Homer_FC_unique_annStats -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ >Homer_FearConditioning_5hmC_FC_RNAseq_introns_ComprehensiveComparison_2 &
-
-#CTCF binding sites
+```
+DE gene introns
+```
+annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_RNAseq_introns.bed mm10 -size 1000 -p 10 -annStats Homer_FC_unique_annStats -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ >Homer_FearConditioning_5hmC_FC_RNAseq_introns_ComprehensiveComparison_2 &
+```
+CTCF binding sites
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/CTCFPeaksClustered.bed mm10 -size 1000 -fragLength 150 -annStats Homer_CTCFPeaksClustered_annStats -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ >Homer_FearConditioning_5hmC_CTCFPeaksClustered_ComprehensiveComparison_2 & 
-
-#lncRNAs
+```
+lncRNAs
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_lncRNA.bed mm10 -size 1000 -fragLength 150 -annStats Homer_FC_lncRNA_annStats -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ >Homer_FearConditioning_5hmC_FC_lncRNA_ComprehensiveComparison_2 &
-
-#enhancers: cell based
+```
+enhancers: cell based
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/enhancers_primarycell_based.bed mm10 -size 1000 -fragLength 150 -annStats Homer_enhancers_primarycell_based_annStats -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ >Homer_FearConditioning_5hmC_enhancers_primarycell_based_ComprehensiveComparison_2 &
-
-#enhancers: tissue based
+```
+enhancers: tissue based
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/enhancers_tissue_based.bed mm10 -size 1000 -fragLength 150 -annStats Homer_enhancers_tissue_based_annStats -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ >Homer_FearConditioning_5hmC_enhancers_tissue_based_ComprehensiveComparison_2 &
-
-#exon boundaries: +/- 50 bp from exons
+```
+exon boundaries: +/- 50 bp from exons
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/mm10_exonboundaries.bed mm10 -size 1000 -fragLength 150 -annStats Homer_mm10_exonboundaries_annStats -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ >Homer_FearConditioning_5hmC_mm10_exonboundaries_ComprehensiveComparison_2 &
+```
 
+_Scatterplots_
 
+HC vs HC, FC, HC_unique, FC_unique
+```
+annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/HC.bed mm10 -size 1000 -fragLength 150 -annStats Homer_HC_annStats -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_tag_directory /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_unique_hMeDIP_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_unique_hMeDIP_tag_directory/ >Homer_FearConditioning_5hmC_HC_ComprehensiveComparison &
+```
+FC vs HC, FC, HC_unique, FC_unique
+```
+annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC.bed mm10 -size 1000 -fragLength 150 -annStats Homer_FC_annStats -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_tag_directory /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_unique_hMeDIP_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_unique_hMeDIP_tag_directory/ >Homer_FearConditioning_5hmC_FC_ComprehensiveComparison &
+```
+HC_unique vs HC, FC, HC_unique, FC_unique
+```
+annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/HC_unique.bed mm10 -size 1000 -fragLength 150 -annStats Homer_HC_unique_annStats -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_tag_directory /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_unique_hMeDIP_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_unique_hMeDIP_tag_directory/ >Homer_FearConditioning_5hmC_HC_unique_ComprehensiveComparison &
+```
+FC_unique vs HC, FC, HC_unique, FC_unique
+```
+annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_unique.bed mm10 -size 1000 -fragLength 150 -annStats Homer_FC_unique_annStats -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_tag_directory /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_unique_hMeDIP_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_unique_hMeDIP_tag_directory/ >Homer_FearConditioning_5hmC_FC_unique_ComprehensiveComparison &
+```
+RNAseq promoters vs 
+```
+annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_RNAseq_promoters.bed mm10 -size 1000 -fragLength 150 -annStats Homer_FC_unique_annStats -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ >Homer_FearConditioning_5hmC_FC_RNAseq_promoters_ComprehensiveComparison_2 &
+```
+RNAseq exons
+```
+annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_RNAseq_exons.bed mm10 -size 1000 -fragLength 150 -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/  >Homer_FearConditioning_5hmC_FC_RNAseq_exons_ComprehensiveComparison_2 &
+```
+RNAseq introns
+```
+annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_RNAseq_introns.bed mm10 -size 1000 -fragLength 150 -annStats Homer_FC_unique_annStats -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ >Homer_FearConditioning_5hmC_FC_RNAseq_introns_ComprehensiveComparison_2 &
+```
+CTCF binding sites
+```
+annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/CTCFPeaksClustered.bed mm10 -size 1000 -fragLength 150 -annStats Homer_CTCFPeaksClustered_annStats -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ >Homer_FearConditioning_5hmC_CTCFPeaksClustered_ComprehensiveComparison_2 & 
+```
+lncRNAs
+```
+annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_lncRNA.bed mm10 -size 1000 -fragLength 150 -annStats Homer_FC_lncRNA_annStats -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ >Homer_FearConditioning_5hmC_FC_lncRNA_ComprehensiveComparison_2 &
+```
+enhancers: cell based
+```
+annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/enhancers_primarycell_based.bed mm10 -size 1000 -fragLength 150 -annStats Homer_enhancers_primarycell_based_annStats -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ >Homer_FearConditioning_5hmC_enhancers_primarycell_based_ComprehensiveComparison_2 &
+```
+enhancers: tissue based
+```
+annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/enhancers_tissue_based.bed mm10 -size 1000 -fragLength 150 -annStats Homer_enhancers_tissue_based_annStats -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ >Homer_FearConditioning_5hmC_enhancers_tissue_based_ComprehensiveComparison_2 &
+```
+exon boundaries: +/- 50 bp from exons
+```
+annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/mm10_exonboundaries.bed mm10 -size 1000 -fragLength 150 -annStats Homer_mm10_exonboundaries_annStats -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ >Homer_FearConditioning_5hmC_mm10_exonboundaries_ComprehensiveComparison_2 &
+```
+###10. FAST ANALYSIS: ANNOTATING REGIONS OF THE GENOME BASED ON DISEASE RELEVANT SNP CONTENT
+###11. Homology ANALYSIS:PHASTCONS
 
-
-
-
-###Plink Set-based test analysis
-##Homology: pull out homologous human sequences of DhMRs -> run set based test to see which regions correspond to SNP-rich human regulatory regions. Pick the overlap of the most significant SNPs and the most conserved region
-
-##Set-based test
 
 
 
