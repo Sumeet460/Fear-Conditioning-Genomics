@@ -315,22 +315,16 @@ FC_HC_Common_HCgreaterFC = subset(FC_HC_common_peaks, HCminusFC >=25)
 write.table(FC_HC_Common_HCgreaterFC, sep = "\t", col.names = F, row.names = F, quote = F, file = "/home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/FC_HC_Common_HCgreaterFC.bed")
 ```
 
-
-prep format and sort the BED files
-RNAseq/wholegene
+Sorting Bedfiles
+```
 bedtools sort -chrThenSizeA -i HCvsFC_RNAseq_wholegene_ALL.bed >HCvsFC_RNAseq_wholegene_ALL_sorted.bed
-#RNAseq/upregulated
-#RNAseq/downregulated
-
-#5hmC-seq/all
+5hmC-seq/all
 bedtools sort -chrThenSizeA -i HCvsFC_AllDynamic5hmC.bed >HCvsFC_AllDynamic5hmC_sorted.bed
-#5hmC-seq/upregulated
+5hmC-seq/upregulated
 bedtools sort -chrThenSizeA -i HCvsFC_5hmC_Inc_increment.bed HCvsFC_5hmC_Inc_increment_sorted.bed
-#5hmC-seq/downregulated
+5hmC-seq/downregulated
 bedtools sort -chrThenSizeA -i HCvsFC_5hmC_Dec_increment.bed >HCvsFC_5hmC_Dec_increment_sorted.bed
-
-
-
+```
 
 MISCELLANEOUS
 
@@ -629,7 +623,7 @@ Two methods:
   
 TFs of interest and their consensus sequences:
 | Gene | Consensus Motif|
--------------------------
+--------|---------------
 HIF-1b	| RTACGTGC
 c-Myc |	VVCCACGTGG
 n-Myc	| VRCCACGTGG
@@ -637,7 +631,7 @@ Maz | GGGGGGGG
 Stat3 (control) | CTTCCGGGAA
 HRE(HSF)	| TTCTAGAABNTTCTA
 PRDM1/Blimp1	| ACTTTCACTTTC
----------------------------
+
 
 seq2motif: creating .motif files - least stringent: *2* mismatches allowed
 ```
