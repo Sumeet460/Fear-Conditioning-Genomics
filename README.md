@@ -213,8 +213,19 @@ IMMOFC4=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobiliz
 
 Combine column 1, with column 2 from every dataframe, add a header with the name of the sample that column came from
 ```{r}
-HCvsFC_rep_gene_counts = data.frame(HC1r$V2, FC3r$V2, FC5r$V2, HC7r$V2, HC2r$V2, FC4r$V2, FC6r$V2, HC8r$V2, row.names = HC1r$V1) 
+HCvsFC_gene_counts = data.frame(FC10Alone$V2, FC11Alone$V2, FC12Alone$V2, Homecage19$V2, Homecage20$V2, Homecage21$V2, Homecage22$V2, Homecage23$V2, Homecage24$V2, FC8Alone$V2, FC9Alone$V2, row.names = Homecage22$V1) 
+colnames(HCvsFC_rep_gene_counts) = c("FC10Alone", "FC11Alone", "FC12Alone", "Homecage19", "Homecage20", "Homecage21", "Homecage22", "Homecage23","Homecage24", "FC8Alone", "FC9Alone")
 
+HCvsIMMOFC_gene_counts = data.frame(Homecage19$V2, Homecage20$V2, Homecage21$V2, Homecage22$V2, Homecage23$V2, Homecage24$V2, IMMOFC3$V2, IMMOFC1$V2, IMMOFC2$V2, IMMOFC4$V2, row.names = Homecage22$V1)
+colnames(HCvsFC_rep_gene_counts) = c("Homecage19", "Homecage20", "Homecage21", "Homecage22", "Homecage23", "Homecage24", "IMMOFC3", "IMMOFC1", "IMMOFC2", "IMMOFC4")
+
+FCvsIMMOFC_genecounts = data.frame(FC10Alone$V2, FC11Alone$V2, FC12Alone$V2, FC8Alone$V2, FC9Alone$V2, IMMOFC3$V2, IMMOFC1$V2, IMMOFC2$V2, IMMOFC4$V2, row.names = Homecage22$V1)
+colnames(HCvsFC_rep_gene_counts) = c("FC10Alone", "FC11Alone", "FC12Alone", "FC8Alone", "FC9Alone", "IMMOFC3", "IMMOFC1", "IMMOFC2", "IMMOFC4")
+
+HCvsFC_ALL = data.frame(HC1r$V2, HC7r$V2, HC2r$V2, HC8r$V2, Homecage19$V2, Homecage20$V2, Homecage21$V2, Homecage22$V2, Homecage23$V2, Homecage24$V2, FC3r$V2, FC5r$V2, FC4r$V2, FC6r$V2, FC10Alone$V2, FC11Alone$V2, FC12Alone$V2, FC8Alone$V2, FC9Alone$V2 row.names = Homecage22$V1)
+colnames(HCvsFC_rep_gene_counts) = c("HC1r", "FC3r", "FC5r", "HC7r", "HC2r", "FC4r", "FC6r", "HC8r")
+
+HCvsFC_rep_gene_counts = data.frame(HC1r$V2, FC3r$V2, FC5r$V2, HC7r$V2, HC2r$V2, FC4r$V2, FC6r$V2, HC8r$V2, row.names = HC1r$V1) 
 colnames(HCvsFC_rep_gene_counts) = c("HC1r", "FC3r", "FC5r", "HC7r", "HC2r", "FC4r", "FC6r", "HC8r")
 ```
 Read in data about each sample
@@ -222,12 +233,10 @@ Read in data about each sample
 colData = read.table("/home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DESeq2/RNASeq_Replication_TBL.txt", header =T, sep ="\t")
 ```
 
-
 DESeq library:
 ```
 library(DESeq2)
 ```
-
 
 se is the RangedSummarizedExperiment object containing counts and information about the samples. In this example design we control for batch and condition, which should be columns of colData(se)
 ```{r}
@@ -266,7 +275,6 @@ pdf("1")
 plotPCA(rld, intgroup=c("Condition"))
 dev.off()
 ```
-
 
 
 ###4. RNASEQ ANALYSIS:DIFFERENTIAL SPLICING:DESEQ2/DEXSEQ & CUFFDIFF
