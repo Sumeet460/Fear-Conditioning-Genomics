@@ -18,6 +18,21 @@ TABLE OF CONTENTS
 
 ###1. ALIGNMENT: STAR
 
+**WholeGenomeFasta Files:**
+- ensembl
+	- Mus_musculus.GRCm38.dna.toplevel.fa
+- UCSC
+	- mm10.fa.align
+	- mm9 -> genome.fa
+
+**GTF Files:**
+- ensembl
+	- Mus_musculus.GRCm38.79.gtf (genes)
+- UCSC
+	- mm10_UCSC_RepeatMasked.gtf (downloaded from UCSC)
+	- 
+	
+
 Generate STAR Genome Index using repeat masked gtf file from UCSC, cat with a normal gtf file  - in order to capture the repetive elements in RepBase in the index
 ```
 /home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --runMode genomeGenerate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --genomeFastaFiles /home/Shared/PengLab/iGenomes/Mus_musculus/UCSC/mm10/Sequence/WholeGenomeFasta/genome.fa --runThreadN 25 --sjdbGTFfile /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Annotation/mm10_UCSC_RepeatMasked_Genes.gtf --sjdbOverhang 100 --limitSjdbInsertNsj 5000000
@@ -202,7 +217,7 @@ FC6r=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNA
 
 HC8r=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/8-947-HC/8-947-HC_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")
 
-IMMOFC3=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/3_IMMO-FC/3_IMMO-FC_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")
+IMMOFC3=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/3_IMMO-FC/3_IMMO-FC_ReadsPerGene.out.tab", header = F, sep ="\t", fill =T, comment.char = "")
 
 IMMOFC1=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/1_IMMO-FC/1_IMMO-FC_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")
 
@@ -222,15 +237,17 @@ colnames(HCvsFC_rep_gene_counts) = c("Homecage19", "Homecage20", "Homecage21", "
 FCvsIMMOFC_genecounts = data.frame(FC10Alone$V2, FC11Alone$V2, FC12Alone$V2, FC8Alone$V2, FC9Alone$V2, IMMOFC3$V2, IMMOFC1$V2, IMMOFC2$V2, IMMOFC4$V2, row.names = Homecage22$V1)
 colnames(HCvsFC_rep_gene_counts) = c("FC10Alone", "FC11Alone", "FC12Alone", "FC8Alone", "FC9Alone", "IMMOFC3", "IMMOFC1", "IMMOFC2", "IMMOFC4")
 
-HCvsFC_ALL = data.frame(HC1r$V2, HC7r$V2, HC2r$V2, HC8r$V2, Homecage19$V2, Homecage20$V2, Homecage21$V2, Homecage22$V2, Homecage23$V2, Homecage24$V2, FC3r$V2, FC5r$V2, FC4r$V2, FC6r$V2, FC10Alone$V2, FC11Alone$V2, FC12Alone$V2, FC8Alone$V2, FC9Alone$V2 row.names = Homecage22$V1)
-colnames(HCvsFC_rep_gene_counts) = c("HC1r", "FC3r", "FC5r", "HC7r", "HC2r", "FC4r", "FC6r", "HC8r")
+HCvsFC_ALL = data.frame(HC1r$V2, HC7r$V2, HC2r$V2, HC8r$V2, Homecage19$V2, Homecage20$V2, Homecage21$V2, Homecage22$V2, Homecage23$V2, Homecage24$V2, FC3r$V2, FC5r$V2, FC4r$V2, FC6r$V2, FC10Alone$V2, FC11Alone$V2, FC12Alone$V2, FC8Alone$V2, FC9Alone$V2, row.names = Homecage22$V1)
+colnames(HCvsFC_rep_gene_counts) = c("HC1r", "HC7r", "HC2r", "HC8r", "Homecage19", "Homecage20", "Homecage21", "Homecage22", "Homecage23", "Homecage24", "FC3r", "FC5r", "FC4r", "FC6r", "FC10Alone", "FC11Alone", "FC12Alone", "FC8Alone", "FC9Alone")
 
 HCvsFC_rep_gene_counts = data.frame(HC1r$V2, FC3r$V2, FC5r$V2, HC7r$V2, HC2r$V2, FC4r$V2, FC6r$V2, HC8r$V2, row.names = HC1r$V1) 
 colnames(HCvsFC_rep_gene_counts) = c("HC1r", "FC3r", "FC5r", "HC7r", "HC2r", "FC4r", "FC6r", "HC8r")
 ```
 Read in data about each sample
 ```
-colData = read.table("/home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DESeq2/RNASeq_Replication_TBL.txt", header =T, sep ="\t")
+colData = read.table("/home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DESeq2/colData_HCvsFC_ALL", header =T, sep ="\t")
+
+
 ```
 
 DESeq library:
