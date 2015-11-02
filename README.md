@@ -29,8 +29,13 @@ TABLE OF CONTENTS
 - ensembl
 	- Mus_musculus.GRCm38.79.gtf (genes)
 - UCSC
-	- mm10_UCSC_RepeatMasked.gtf (downloaded from UCSC)
-	- 
+	-  /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Annotation/mm10_UCSC_RepeatMasked.gtf (repeat masked annotations only downloaded from UCSC)
+	- /home/Shared/PengLab/iGenomes/Mus_musculus/UCSC/mm10/Annotation/Genes/genes.gtf
+	- /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Annotation/mm10_UCSC_RepeatMasked_Genes.gtf (Repeat masked annotation concatenated with the normal annotation)
+	
+
+**Indices:**
+- /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex (this one was created concatenating the normal UCSC mm10 gtf w/ the RepeatMasked GTF)
 	
 
 Generate STAR Genome Index using repeat masked gtf file from UCSC, cat with a normal gtf file  - in order to capture the repetive elements in RepBase in the index
@@ -151,6 +156,65 @@ mkdir 4_IMMO-FC
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/4_IMMO-FC
 /home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --readFilesCommand zcat --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/fastq_files/4_IMMO-FC_GCCAAT_L001_R1_001.fastq.gz --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/4_IMMO-FC/4_IMMO-FC_ --outSAMtype BAM SortedByCoordinate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --runThreadN 25 --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts
 ```
+1-935-HC (RNAseq Replication)
+```
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC
+mkdir 1-935-HC
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC/1-935-HC
+/home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --runThreadN 25 --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC/1-935-HC/1-935-HC_ --outSAMstrandField intronMotif --outSAMtype BAM SortedByCoordinate --readFilesCommand zcat --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/fastq_files/1-935-HC_GTCCGC_L008_R1_001.fastq.gz
+```
+2-935-HC (RNAseq Replication)
+```
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC
+mkdir 2-935-HC
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC/2-935-HC
+/home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --runThreadN 25 --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC/2-935-HC/2-935-HC_ --outSAMstrandField intronMotif --outSAMtype BAM SortedByCoordinate --readFilesCommand zcat --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/fastq_files/2-935-HC_GTGAAA_L008_R1_001.fastq.gz
+```
+3-940-FC (RNAseq Replication)
+```
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC
+mkdir 3-940-FC
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC/3-940-FC
+/home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --runThreadN 25 --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC/3-940-FC/3-940-FC_ --outSAMstrandField intronMotif --outSAMtype BAM SortedByCoordinate --readFilesCommand zcat --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/fastq_files/3-940-FC_ATCACG_L008_R1_001.fastq.gz
+```
+4-940-FC (RNAseq Replication)
+```
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC
+mkdir 4-940-FC
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC/4-940-FC
+/home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --runThreadN 25 --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC/4-940-FC/4-940-FC_ --outSAMstrandField intronMotif --outSAMtype BAM SortedByCoordinate --readFilesCommand zcat --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/fastq_files/4-940-FC_TTAGGC_L008_R1_001.fastq.gz
+```
+5-938-FC (RNAseq Replication)
+```
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC
+mkdir 5-938-FC
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC/5-938-FC
+/home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --runThreadN 25 --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC/5-938-FC/5-938-FC_ --outSAMstrandField intronMotif --outSAMtype BAM SortedByCoordinate --readFilesCommand zcat --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/fastq_files/5-938-FC_ACTTGA_L008_R1_001.fastq.gz
+```
+6-938-FC (RNAseq Replication)
+```
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC
+mkdir 6-938-FC
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC/6-938-FC
+/home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --runThreadN 25 --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC/6-938-FC/6-938-FC_ --outSAMstrandField intronMotif --outSAMtype BAM SortedByCoordinate --readFilesCommand zcat --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/fastq_files/6-938-FC_GATCAG_L008_R1_001.fastq.gz
+```
+7-947-HC (RNAseq Replication)
+```
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC
+mkdir 7-947-HC
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC/7-947-HC
+/home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --runThreadN 25 --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC/7-947-HC/7-947-HC_ --outSAMstrandField intronMotif --outSAMtype BAM SortedByCoordinate --readFilesCommand zcat --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/fastq_files/7-947-HC_TAGCTT_L008_R1_001.fastq.gz
+```
+8-947-HC (RNAseq Replication)
+```
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC
+mkdir 8-947-HC
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC/8-947-HC
+/home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --runThreadN 25 --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC/8-947-HC/8-947-HC_ --outSAMstrandField intronMotif --outSAMtype BAM SortedByCoordinate --readFilesCommand zcat --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/fastq_files/8-947-HC_GGCTAC_L008_R1_001.fastq.gz
+```
+
+
+
 
 ###2. RNASEQ ANALYSIS:DIFFERENTIAL EXPRESSION:CUFFDIFF
 
@@ -200,7 +264,29 @@ Homecage24=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobi
 FC8Alone=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/8_FC-Alone/8_FC-Alone_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")
 
 FC9Alone=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/9_FC-Alone/9_FC-Alone_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")
+```
+Replication UCSC BAMs
+```{r}
+HC8r=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC/8-947-HC/8-947-HC_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")
 
+HC7r=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC/7-947-HC/7-947-HC_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")
+ 
+FC6r=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC/6-938-FC/6-938-FC_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")
+  
+FC5r=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC/5-938-FC/5-938-FC_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")
+
+FC4r=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC/4-940-FC/4-940-FC_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")
+  
+FC3r=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC/3-940-FC/3-940-FC_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "") 
+ 
+HC2r=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC/2-935-HC/2-935-HC_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")  
+
+HC1r=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC/1-935-HC/1-935-HC_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")
+
+```
+
+Replication ensemble BAMs
+```{r}
 HC1r=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/1-935-HC/1-935-HC_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")
 
 FC3r=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/3-940-FC/3-940-FC_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")
@@ -216,7 +302,10 @@ FC4r=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNA
 FC6r=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/6-938-FC/6-938-FC_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")  
 
 HC8r=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/8-947-HC/8-947-HC_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")
+```
 
+IMMO - UCSC BAMs
+```{r}
 IMMOFC3=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/3_IMMO-FC/3_IMMO-FC_ReadsPerGene.out.tab", header = F, sep ="\t", fill =T, comment.char = "")
 
 IMMOFC1=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/1_IMMO-FC/1_IMMO-FC_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")
@@ -238,7 +327,7 @@ FCvsIMMOFC_genecounts = data.frame(FC10Alone$V2, FC11Alone$V2, FC12Alone$V2, FC8
 colnames(HCvsFC_rep_gene_counts) = c("FC10Alone", "FC11Alone", "FC12Alone", "FC8Alone", "FC9Alone", "IMMOFC3", "IMMOFC1", "IMMOFC2", "IMMOFC4")
 
 HCvsFC_ALL = data.frame(HC1r$V2, HC7r$V2, HC2r$V2, HC8r$V2, Homecage19$V2, Homecage20$V2, Homecage21$V2, Homecage22$V2, Homecage23$V2, Homecage24$V2, FC3r$V2, FC5r$V2, FC4r$V2, FC6r$V2, FC10Alone$V2, FC11Alone$V2, FC12Alone$V2, FC8Alone$V2, FC9Alone$V2, row.names = Homecage22$V1)
-colnames(HCvsFC_rep_gene_counts) = c("HC1r", "HC7r", "HC2r", "HC8r", "Homecage19", "Homecage20", "Homecage21", "Homecage22", "Homecage23", "Homecage24", "FC3r", "FC5r", "FC4r", "FC6r", "FC10Alone", "FC11Alone", "FC12Alone", "FC8Alone", "FC9Alone")
+colnames(HCvsFC_ALL) = c("HC1r", "HC7r", "HC2r", "HC8r", "Homecage19", "Homecage20", "Homecage21", "Homecage22", "Homecage23", "Homecage24", "FC3r", "FC5r", "FC4r", "FC6r", "FC10Alone", "FC11Alone", "FC12Alone", "FC8Alone", "FC9Alone")
 
 HCvsFC_rep_gene_counts = data.frame(HC1r$V2, FC3r$V2, FC5r$V2, HC7r$V2, HC2r$V2, FC4r$V2, FC6r$V2, HC8r$V2, row.names = HC1r$V1) 
 colnames(HCvsFC_rep_gene_counts) = c("HC1r", "FC3r", "FC5r", "HC7r", "HC2r", "FC4r", "FC6r", "HC8r")
@@ -257,7 +346,7 @@ library(DESeq2)
 
 se is the RangedSummarizedExperiment object containing counts and information about the samples. In this example design we control for batch and condition, which should be columns of colData(se)
 ```{r}
-dds <- DESeqDataSetFromMatrix(countData = HCvsFC_rep_gene_counts,
+dds <- DESeqDataSetFromMatrix(countData = HCvsFC_ALL,
                               colData = colData,
                               design = ~ Condition)
 ```
@@ -288,13 +377,20 @@ write.csv(as.data.frame(resOrdered), file="HCvsFC_RNASeq_Replicate_Results.csv")
 
 PCA
 ```{r}
-pdf("1")
+rld = rlog(dds)
+pdf("PCA_HCvsFC_ALL")
 plotPCA(rld, intgroup=c("Condition"))
 dev.off()
 ```
 
 
-###4. RNASEQ ANALYSIS:DIFFERENTIAL SPLICING:DESEQ2/DEXSEQ & CUFFDIFF
+###4. RNASEQ ANALYSIS:DIFFERENTIAL SPLICING:DEXSEQ & CUFFDIFF
+
+HTSeq: generate flattened GFF of the exon counting bins
+```
+python /path/to/library/DEXSeq/python_scripts/dexseq_prepare_annotation.py
+    /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Annotation/mm10_UCSC_RepeatMasked_Genes.gtf  /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Annotation/mm10_UCSC_RepeatMasked_Genes.gff 
+```
 
 
 ###5. 5HMC ANALYSIS:PEAK CALLING:MACS                                                                                    
