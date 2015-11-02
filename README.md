@@ -185,20 +185,88 @@ Homecage24=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobi
 FC8Alone=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/8_FC-Alone/8_FC-Alone_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")
 
 FC9Alone=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/9_FC-Alone/9_FC-Alone_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")
+
+HC1r=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/1-935-HC/1-935-HC_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")
+
+FC3r=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/3-940-FC/3-940-FC_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")
+ 
+FC5r=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/5-938-FC/5-938-FC_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")
+  
+HC7r=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/7-947-HC/7-947-HC_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")
+
+HC2r=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/2-935-HC/2-935-HC_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")
+  
+FC4r=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/4-940-FC/4-940-FC_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "") 
+ 
+FC6r=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/6-938-FC/6-938-FC_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")  
+
+HC8r=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/8-947-HC/8-947-HC_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")
+
+IMMOFC3=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/3_IMMO-FC/3_IMMO-FC_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")
+
+IMMOFC1=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/1_IMMO-FC/1_IMMO-FC_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")
+
+IMMOFC2=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/2_IMMO-FC/2_IMMO-FC_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")
+
+IMMOFC4=read.table("/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/4_IMMO-FC/4_IMMO-FC_ReadsPerGene.out.tab", header =F, sep ="\t", fill =T, comment.char = "")
 ```
 
 Combine column 1, with column 2 from every dataframe, add a header with the name of the sample that column came from
 ```{r}
+HCvsFC_rep_gene_counts = data.frame(HC1r$V2, FC3r$V2, FC5r$V2, HC7r$V2, HC2r$V2, FC4r$V2, FC6r$V2, HC8r$V2, row.names = HC1r$V1) 
 
-HCvsFC_gene_counts = data.frame(FC10Alone$V2, FC11Alone$V2, FC12Alone$V2, FC8Alone$V2, FC9Alone$V2, Homecage19$V2, Homecage20$V2, Homecage21$V2, Homecage22$V2, Homecage23$V2, Homecage24$V2, row.names = FC10Alone$V1) 
-
-library(plyr)
-rename(HCvsFC_gene_counts, c("FC10Alone.V2"="FC10Alone"))
-
-FC11Alone$V2, FC12Alone$V2, FC8Alone$V2, FC9Alone$V2, Homecage19$V2, Homecage20$V2, Homecage21$V2, Homecage22$V2, Homecage23$V2, Homecage24$V2
-
-col.names = c("FC10Alone$V2", "FC11Alone$V2", "FC12Alone$V2", "FC8Alone$V2", "FC9Alone$V2", "Homecage19$V2", "Homecage20$V2", "Homecage21$V2", "Homecage22$V2", "Homecage23$V2", "Homecage24$V2)
+colnames(HCvsFC_rep_gene_counts) = c("HC1r", "FC3r", "FC5r", "HC7r", "HC2r", "FC4r", "FC6r", "HC8r")
 ```
+Read in data about each sample
+```
+colData = read.table("/home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DESeq2/RNASeq_Replication_TBL.txt", header =T, sep ="\t")
+```
+
+
+DESeq library:
+```
+library(DESeq2)
+```
+
+
+se is the RangedSummarizedExperiment object containing counts and information about the samples. In this example design we control for batch and condition, which should be columns of colData(se)
+```{r}
+dds <- DESeqDataSetFromMatrix(countData = HCvsFC_rep_gene_counts,
+                              colData = colData,
+                              design = ~ Condition)
+```
+
+Relevel so that HomeCage is the reference
+```{r}
+dds$Condition = relevel(dds$Condition, "HomeCage")
+```
+
+DE Analysis:
+```{r}
+library(BiocParallel)
+register(MulticoreParam(20))
+dds = DESeq(dds, parallel=TRUE)
+res = results(dds)
+```
+Manipulation of results dataframe
+```{r}
+resOrdered = res[order(res$padj),]
+summary(res)
+```
+
+Export Results
+```{r}
+resOrdered_subset = subset(resOrdered, padj <0.3)
+write.csv(as.data.frame(resOrdered), file="HCvsFC_RNASeq_Replicate_Results.csv")
+```
+
+PCA
+```{r}
+pdf("1")
+plotPCA(rld, intgroup=c("Condition"))
+dev.off()
+```
+
 
 
 ###4. RNASEQ ANALYSIS:DIFFERENTIAL SPLICING:DESEQ2/DEXSEQ & CUFFDIFF
