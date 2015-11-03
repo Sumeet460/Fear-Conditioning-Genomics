@@ -387,11 +387,16 @@ dev.off()
 ###4. RNASEQ ANALYSIS:DIFFERENTIAL SPLICING:DEXSEQ & CUFFDIFF
 
 HTSeq: generate flattened GFF of the exon counting bins
+mm10_UCSC_RepeatMasked_Genes.gtf (comprehensive gtf file)
 ```
-python /path/to/library/DEXSeq/python_scripts/dexseq_prepare_annotation.py
-    /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Annotation/mm10_UCSC_RepeatMasked_Genes.gtf  /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Annotation/mm10_UCSC_RepeatMasked_Genes.gff 
+python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/DEXSeq/python_scripts/dexseq_prepare_annotation.py /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Annotation/mm10_UCSC_RepeatMasked_Genes.gtf /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Annotation/mm10_UCSC_RepeatMasked_Genes.gff &
 ```
 
+genes.gtf (UCSC genes only)
+```
+python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/DEXSeq/python_scripts/dexseq_prepare_annotation.py /home/Shared/PengLab/iGenomes/Mus_musculus/UCSC/mm10/Annotation/Genes/genes.gtf /home/Shared/PengLab/iGenomes/Mus_musculus/UCSC/mm10/Annotation/Genes/genes.gff &
+```
+ 
 
 ###5. 5HMC ANALYSIS:PEAK CALLING:MACS                                                                                    
 
