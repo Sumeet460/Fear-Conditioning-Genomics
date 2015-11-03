@@ -18,14 +18,15 @@ TABLE OF CONTENTS
 
 ###1. ALIGNMENT: STAR
 
-**WholeGenomeFasta Files:**
+**Base Files**
+*WholeGenomeFasta Files:*
 - ensembl
 	- Mus_musculus.GRCm38.dna.toplevel.fa
 - UCSC
 	- mm10.fa.align
 	- mm9 -> genome.fa
 
-**GTF Files:**
+*GTF Files:*
 - ensembl
 	- Mus_musculus.GRCm38.79.gtf (genes)
 - UCSC
@@ -34,7 +35,7 @@ TABLE OF CONTENTS
 	- /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Annotation/mm10_UCSC_RepeatMasked_Genes.gtf (Repeat masked annotation concatenated with the normal annotation)
 	
 
-**Indices:**
+*Indices:*
 - /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex (this one was created concatenating the normal UCSC mm10 gtf w/ the RepeatMasked GTF)
 	
 
@@ -43,7 +44,7 @@ Generate STAR Genome Index using repeat masked gtf file from UCSC, cat with a no
 /home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --runMode genomeGenerate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --genomeFastaFiles /home/Shared/PengLab/iGenomes/Mus_musculus/UCSC/mm10/Sequence/WholeGenomeFasta/genome.fa --runThreadN 25 --sjdbGTFfile /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Annotation/mm10_UCSC_RepeatMasked_Genes.gtf --sjdbOverhang 100 --limitSjdbInsertNsj 5000000
 ```
 
-Alignment Runs:
+**Alignment Runs: UCSC**
 Automated - didn't implement this, but would've save a lot of time...
 ```
 for f in `cat files`; do STAR --genomeDir ../STAR/ENSEMBL.homo_sapiens.release-75 \
@@ -213,7 +214,86 @@ cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replicatio
 /home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --runThreadN 25 --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC/8-947-HC/8-947-HC_ --outSAMstrandField intronMotif --outSAMtype BAM SortedByCoordinate --readFilesCommand zcat --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/fastq_files/8-947-HC_GGCTAC_L008_R1_001.fastq.gz
 ```
 
+**STAR Alignment: ensembl**
 
+19_Homecage
+```
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens
+mkdir 19_Homecage
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens/19_Homecage
+/home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --readFilesCommand zcat --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/fastq_files/19_Homecage_ACAGTG_L002_R1_001.fastq.gz --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens/19_Homecage/19_Homecage_ --outSAMtype BAM SortedByCoordinate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Sequence/STARIndex --runThreadN 25 --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts 
+```
+20_Homecage
+```
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens/
+mkdir 20_Homecage
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens/20_Homecage
+/home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --readFilesCommand zcat --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/fastq_files/20_Homecage_GCCAAT_L002_R1_001.fastq.gz --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens/20_Homecage/20_Homecage_ --outSAMtype BAM SortedByCoordinate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Sequence/STARIndex --runThreadN 25 --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts 
+```
+21_Homecage
+```
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens
+mkdir 21_Homecage
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens/21_Homecage
+/home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --readFilesCommand zcat --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/fastq_files/21_Homecage_CAGATC_L002_R1_001.fastq.gz --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens/21_Homecage/21_Homecage_ --outSAMtype BAM SortedByCoordinate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Sequence/STARIndex --runThreadN 25 --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts 
+```
+22_Homecage
+```
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens
+mkdir 22_Homecage
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens/22_Homecage
+/home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --readFilesCommand zcat --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/fastq_files/22_Homecage_CTTGTA_L002_R1_001.fastq.gz --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens/22_Homecage/22_Homecage_ --outSAMtype BAM SortedByCoordinate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Sequence/STARIndex --runThreadN 25 --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts 
+```
+23_Homecage
+```
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens
+mkdir 23_Homecage
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens/23_Homecage
+/home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --readFilesCommand zcat --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/fastq_files/23_Homecage_AGTCAA_L002_R1_001.fastq.gz --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens/23_Homecage/23_Homecage_ --outSAMtype BAM SortedByCoordinate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Sequence/STARIndex --runThreadN 25 --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts 
+```
+24_Homecage
+```
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens
+mkdir 24_Homecage
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens/24_Homecage
+/home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --readFilesCommand zcat --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/fastq_files/24_Homecage_AGTTCC_L002_R1_001.fastq.gz --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens/24_Homecage/24_Homecage_ --outSAMtype BAM SortedByCoordinate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Sequence/STARIndex --runThreadN 25 --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts
+```
+10_FC-Alone
+```
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens
+mkdir 10_FC-Alone
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens/10_FC-Alone
+/home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --readFilesCommand zcat --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/fastq_files/10_FC-Alone_AGTTCC_L001_R1_001.fastq.gz --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens/10_FC-Alone/10_FC-Alone_ --outSAMtype BAM SortedByCoordinate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Sequence/STARIndex --runThreadN 25 --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts
+ ```
+11_FC-Alone
+```
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens
+mkdir 11_FC-Alone
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens/11_FC-Alone
+/home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --readFilesCommand zcat --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/fastq_files/11_FC-Alone_CGATGT_L002_R1_001.fastq.gz --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens/11_FC-Alone/11_FC-Alone_ --outSAMtype BAM SortedByCoordinate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Sequence/STARIndex --runThreadN 25 --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts
+```
+
+12_FC-Alone
+```
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens
+mkdir 12_FC-Alone
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens/12_FC-Alone
+/home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --readFilesCommand zcat --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/fastq_files/12_FC-Alone_TGACCA_L002_R1_001.fastq.gz --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens/12_FC-Alone/12_FC-Alone_ --outSAMtype BAM SortedByCoordinate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Sequence/STARIndex --runThreadN 25 --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts
+```
+9_FC-Alone
+```
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens
+mkdir 9_FC-Alone
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens/9_FC-Alone
+/home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --readFilesCommand zcat --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/fastq_files/9_FC-Alone_AGTCAA_L001_R1_001.fastq.gz --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens/9_FC-Alone/9_FC-Alone_ --outSAMtype BAM SortedByCoordinate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Sequence/STARIndex --runThreadN 25 --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts
+ ```
+8_FC-Alone
+```
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens
+mkdir 8_FC-Alone
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens/8_FC-Alone
+/home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --readFilesCommand zcat --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/fastq_files/8_FC-Alone_CTTGTA_L001_R1_001.fastq.gz --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens/8_FC-Alone/8_FC-Alone_ --outSAMtype BAM SortedByCoordinate --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Sequence/STARIndex --runThreadN 25 --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts
+```
 
 
 ###2. RNASEQ ANALYSIS:DIFFERENTIAL EXPRESSION:CUFFDIFF
@@ -229,6 +309,11 @@ FC Differential expression analysis: using only repeat masked gtf
 ```
 cuffdiff -o ./AmygFC_vs_AmygHC_RepeatMasked_SMALL -L HC,FC -p 25 -u /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Annotation/mm10_UCSC_RepeatMasked.gtf /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/19_Homecage_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/20_Homecage_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/21_Homecage_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/22_Homecage_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/23_Homecage_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/24_Homecage_Aligned.sortedByCoord.out.bam /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/10_FC-Alone_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/11_FC-Alone_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/12_FC-Alone_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/8_FC-Alone_Aligned.sortedByCoord.out.bam,/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_UCSC_RepeatMasker/BAMs/9_FC-Alone_Aligned.sortedByCoord.out.bam &
 ```
+
+Alignment Runs: Ensembl
+
+
+
 
 ###3. RNASEQ ANALYSIS:DIFFERENTIAL EXPRESSION:DESEQ2
 
@@ -391,12 +476,101 @@ mm10_UCSC_RepeatMasked_Genes.gtf (comprehensive gtf file)
 ```
 python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/DEXSeq/python_scripts/dexseq_prepare_annotation.py /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Annotation/mm10_UCSC_RepeatMasked_Genes.gtf /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Annotation/mm10_UCSC_RepeatMasked_Genes.gff &
 ```
-
 genes.gtf (UCSC genes only)
 ```
-python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/DEXSeq/python_scripts/dexseq_prepare_annotation.py /home/Shared/PengLab/iGenomes/Mus_musculus/UCSC/mm10/Annotation/Genes/genes.gtf /home/Shared/PengLab/iGenomes/Mus_musculus/UCSC/mm10/Annotation/Genes/genes.gff &
+python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/DEXSeq/python_scripts/dexseq_prepare_annotation.py -r no genes.gtf genes.gff
 ```
- 
+
+*TOO MANY ISSUES WITH TEH UCSC GTF FILES - USE ENSEMBL FILES FOR NOW...SEE IF THEY RELEASE A PATCH TO MAKE UCSC ANNOTATIONS FUNCTIONAL LATER ON*
+
+Counting reads into exon bins:
+
+1-935-HC
+```
+python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/DEXSeq/python_scripts/dexseq_count.py -s no -f bam /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Annotation/Genes/Mus_musculus.GRCm38.79.gff ~/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/2-935-HC/2-935-HC_Aligned.sortedByCoord.out.bam /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq/
+```
+2-935-HC:
+```
+python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/DEXSeq/python_scripts/dexseq_count.py -s no -f bam /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Annotation/Genes/Mus_musculus.GRCm38.79.gff ~/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/1-935-HC/1-935-HC_Aligned.sortedByCoord.out.bam /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq/
+```
+
+3-940-FC:
+```
+python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/DEXSeq/python_scripts/dexseq_count.py -s no -f bam /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Annotation/Genes/Mus_musculus.GRCm38.79.gff ~/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/3-940-FC/3-940-FC_Aligned.sortedByCoord.out.bam /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq/
+```
+
+4-940-FC:
+```
+python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/DEXSeq/python_scripts/dexseq_count.py -s no -f bam /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Annotation/Genes/Mus_musculus.GRCm38.79.gff ~/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/4-940-FC/4-940-FC_Aligned.sortedByCoord.out.bam /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq/
+```
+
+5-938-FC:
+```
+python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/DEXSeq/python_scripts/dexseq_count.py -s no -f bam /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Annotation/Genes/Mus_musculus.GRCm38.79.gff ~/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/5-938-FC/5-938-FC_Aligned.sortedByCoord.out.bam /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq/
+```
+
+6-938-FC
+```
+python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/DEXSeq/python_scripts/dexseq_count.py -s no -f bam /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Annotation/Genes/Mus_musculus.GRCm38.79.gff ~/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/6-938-FC/6-938-FC_Aligned.sortedByCoord.out.bam /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq/
+```
+7-947-HC:
+```
+python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/DEXSeq/python_scripts/dexseq_count.py -s no -f bam /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Annotation/Genes/Mus_musculus.GRCm38.79.gff ~/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/7-947-HC/7-947-HC_Aligned.sortedByCoord.out.bam /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq/
+```
+
+8-947-HC:
+```
+python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/DEXSeq/python_scripts/dexseq_count.py -s no -f bam /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Annotation/Genes/Mus_musculus.GRCm38.79.gff ~/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/8-947-HC/8-947-HC_Aligned.sortedByCoord.out.bam /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq/
+```
+
+
+19_Homecage
+```
+python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/DEXSeq/python_scripts/dexseq_count.py -s no -f bam /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Annotation/Genes/Mus_musculus.GRCm38.79.gff ~/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/8-947-HC/8-947-HC_Aligned.sortedByCoord.out.bam /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq/
+```
+20_Homecage
+```
+python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/DEXSeq/python_scripts/dexseq_count.py -s no -f bam /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Annotation/Genes/Mus_musculus.GRCm38.79.gff ~/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/8-947-HC/8-947-HC_Aligned.sortedByCoord.out.bam /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq/
+```
+21_Homecage
+```
+python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/DEXSeq/python_scripts/dexseq_count.py -s no -f bam /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Annotation/Genes/Mus_musculus.GRCm38.79.gff ~/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/8-947-HC/8-947-HC_Aligned.sortedByCoord.out.bam /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq/
+```
+22_Homecage
+```
+python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/DEXSeq/python_scripts/dexseq_count.py -s no -f bam /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Annotation/Genes/Mus_musculus.GRCm38.79.gff ~/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/8-947-HC/8-947-HC_Aligned.sortedByCoord.out.bam /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq/
+```
+23_Homecage
+```
+python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/DEXSeq/python_scripts/dexseq_count.py -s no -f bam /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Annotation/Genes/Mus_musculus.GRCm38.79.gff ~/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/8-947-HC/8-947-HC_Aligned.sortedByCoord.out.bam /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq/
+```
+24_Homecage
+```
+python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/DEXSeq/python_scripts/dexseq_count.py -s no -f bam /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Annotation/Genes/Mus_musculus.GRCm38.79.gff ~/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/8-947-HC/8-947-HC_Aligned.sortedByCoord.out.bam /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq/
+```
+10_FC-Alone
+```
+python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/DEXSeq/python_scripts/dexseq_count.py -s no -f bam /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Annotation/Genes/Mus_musculus.GRCm38.79.gff ~/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/8-947-HC/8-947-HC_Aligned.sortedByCoord.out.bam /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq/
+ ```
+11_FC-Alone
+```
+python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/DEXSeq/python_scripts/dexseq_count.py -s no -f bam /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Annotation/Genes/Mus_musculus.GRCm38.79.gff ~/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/8-947-HC/8-947-HC_Aligned.sortedByCoord.out.bam /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq/
+```
+
+12_FC-Alone
+```
+python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/DEXSeq/python_scripts/dexseq_count.py -s no -f bam /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Annotation/Genes/Mus_musculus.GRCm38.79.gff ~/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/8-947-HC/8-947-HC_Aligned.sortedByCoord.out.bam /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq/
+```
+9_FC-Alone
+```
+python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/DEXSeq/python_scripts/dexseq_count.py -s no -f bam /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Annotation/Genes/Mus_musculus.GRCm38.79.gff ~/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/8-947-HC/8-947-HC_Aligned.sortedByCoord.out.bam /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq/
+ ```
+8_FC-Alone
+```
+python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/DEXSeq/python_scripts/dexseq_count.py -s no -f bam /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Annotation/Genes/Mus_musculus.GRCm38.79.gff ~/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_ens/8-947-HC/8-947-HC_Aligned.sortedByCoord.out.bam /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq/
+```
+
+
 
 ###5. 5HMC ANALYSIS:PEAK CALLING:MACS                                                                                    
 
