@@ -622,10 +622,21 @@ Normalisation & Dispersion estimation & DEU test
 ```{r}
 dxd = estimateSizeFactors( dxd )
 dxd = estimateDispersions( dxd )
+
+pdf("Dispersion_estimates.pdf")
 plotDispEsts( dxd )
+dev.off()
+
 dxd = testForDEU( dxd )
 ```
 
+plotting
+```{r}
+dxr2 = DEXSeqResults( dxd )
+pdf("Tac2_DEU.pdf")
+plotDEXSeq( dxr2, "ENSMUSG00000025400", legend=TRUE, cex.axis=1.2, cex=1.3, lwd=2 )
+dev.off()
+```
 
 
 ###5. 5HMC ANALYSIS:PEAK CALLING:MACS                                                                                    
