@@ -557,11 +557,11 @@ python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/
 ```
 10_FC-Alone
 ```
-python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/DEXSeq/python_scripts/dexseq_count.py -s no -f bam /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Annotation/Genes/Mus_musculus.GRCm38.79.gff/home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens/10_FC-Alone/10_FC-Alone_Aligned.sortedByCoord.out.bam /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq/10_FC-Alone_ExonCounts.txt
+python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/DEXSeq/python_scripts/dexseq_count.py -s no -f bam /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Annotation/Genes/Mus_musculus.GRCm38.79.gff /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens/10_FC-Alone/10_FC-Alone_Aligned.sortedByCoord.out.bam /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq/10_FC-Alone_ExonCounts.txt
  ```
 11_FC-Alone
 ```
-python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/DEXSeq/python_scripts/dexseq_count.py -s no -f bam /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Annotation/Genes/Mus_musculus.GRCm38.79.gff /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens/11_FC-Alone/12_FC-Alone_Aligned.sortedByCoord.out.bam /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq/11_FC-Alone_ExonCounts.txt
+python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/DEXSeq/python_scripts/dexseq_count.py -s no -f bam /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Annotation/Genes/Mus_musculus.GRCm38.79.gff /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens/11_FC-Alone/11_FC-Alone_Aligned.sortedByCoord.out.bam /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq/11_FC-Alone_ExonCounts.txt
 ```
 
 12_FC-Alone
