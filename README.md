@@ -609,6 +609,7 @@ Common Homecage peaks
 ```
 bedtools intersect -a /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/fear_conditioning_HC1_5hmC_MACS/fear_conditioning_HC1_5hmC_MACS_peaks.subpeaks.bed -b /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/fear_conditioning_HC2_5hmC_MACS/fear_conditioning_HC2_5hmC_MACS_peaks.subpeaks.bed -bed -sorted -g /home/Shared/PengLab/iGenomes/Mus_musculus/UCSC/mm10/Annotation/Genes/ChromInfo.txt >HC1_HC2_BTIntersect.peaks.subpeaks.bed
 ```
+
 Common homecage peaks; retain all the fields, so that peak height can be kept for downstream analyses
 ```
 bedtools intersect -a /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/fear_conditioning_HC1_5hmC_MACS/fear_conditioning_HC1_5hmC_MACS_peaks.subpeaks.bed -b /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/fear_conditioning_HC2_5hmC_MACS/fear_conditioning_HC2_5hmC_MACS_peaks.subpeaks.bed -bed -sorted -wa -wb -g /home/Shared/PengLab/iGenomes/Mus_musculus/UCSC/mm10/Annotation/Genes/ChromInfo.txt >HC1_HC2_BTIntersect.peaks.subpeaks_PeakHeight.bed
@@ -752,27 +753,39 @@ Other interesting coordinate sets to generate
 ```
 
 ###7. ANNOTATION ANALYSIS:HOMER
-```
+
  -HCvsFC_5hmCseq_Inc
  -HCvsFC_5hmCseq_Dec
  -HCvsFC_5hmCseq_ALL
  -HCvsFC RNAseq
  -HCvsFC 5hmC & RNAseq overlap
  -HCvsFC TRAPseq: unique and distinct from regular RNAseq
+
+Peak sets: HCvsFC_5hmC_Dec_increment.bed, HCvsFC_5hmC_Inc_increment.bed, HCvsFC_AllDHMR.bed
+
+Annotation of HCvsFC_AllDHMR.bed (using UCSC GTF used to align the files in the first place
+```
+annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/HCvsFC_AllDHMR.bed /home/Shared/PengLab/iGenomes/Mus_musculus/UCSC/mm10/Annotation/Genes/genes.gtf >HCvsFC_AllDHMR_HomerAnnotations.txt
+```
+
+python script
+```
+~/bin/ExtractGeneNames_HomerOutput_Down.py HCvsFC_AllDHMR_HomerAnnotations.txt HCvsFC_AllDHMR_HomerAnnotations_Craig.txt
 ```
 
 ORDER OF ANNOTATION ENRICHMENT CHANGE (HC > FC)
 intron>exon>intergenic>LTR~>promoter
 
 Python Script for Homer Annotations
+
 ```
 import os
 import fnmatch
 import pybedtools
  
  
-InputGeneNames = open('FXTAS.SCA7.WT.common.DhMR.Homer.txt','r')
-GeneFileGTF = open('/home/byao/homer/data/accession/mouse2gene.tsv','r')
+InputGeneNames = open('HCvsFC_AllDHMR_HomerAnnotations','r')
+GeneFileGTF = open('/home/Shared/PengLab/iGenomes/Mus_musculus/UCSC/mm10/Annotation/Genes/genes.gtf','r')
 GeneList = {}
 AccessionNumbers = {}
  
