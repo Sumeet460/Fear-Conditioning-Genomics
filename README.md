@@ -577,6 +577,55 @@ python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/
 python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/DEXSeq/python_scripts/dexseq_count.py -s no -f bam /home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Annotation/Genes/Mus_musculus.GRCm38.79.gff /home/ssharma/Ressler_RNASeq/data/FearConditioning_Immobilization_Extinction_Amygdala_RNASeq/STAR_Aligned_BAMs_ens/8_FC-Alone/8_FC-Alone_Aligned.sortedByCoord.out.bam /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq/8_FC-Alone_ExonCounts.txt
 ```
 
+Read data into R
+```
+countDir = "/home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq/ExonCounts"
+countFiles = list.files(countDir, pattern="ExonCounts.txt$", full.names=TRUE)
+flatDir = "/home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Annotation/Genes"
+flattenedFile = list.files(flatDir, pattern="gff$", full.names=TRUE)
+```
+
+Prepare Sample Table
+```
+sampleTable = read.table("/home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq/HCvsFC_ALL_SampleTable.DEXSeq", sep ="\t", header = T)
+
+sampleTable = data.frame(
+   row.names = c( "10_FC-Alone", "11_FC-Alone", "12_FC-Alone", "1-935-HC", "19_HC", "20_HC", "21_HC", "22_HC", "23_HC", "24_HC", "2-935-HC", "3-940-FC", "4-940-FC", "5-938-FC", "6-938-FC", "7-947-HC", "8-947-HC", "8_FC-Alone", "9_FC-Alone" ),
+   condition = c("FearConditioning", "FearConditioning", "FearConditioning", "HomeCage", "HomeCage", "HomeCage", "HomeCage", "HomeCage", "HomeCage", "HomeCage", "HomeCage", "FearConditioning", "FearConditioning", "FearConditioning", "FearConditioning", "HomeCage", "HomeCage", "FearConditioning", "FearConditioning" )
+   )
+
+```
+
+DEXSeq Analysis
+Data object creation
+```{r}
+library( "DEXSeq" )
+
+sampletableDir = "/home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq"
+sampleTable = read.table(
+  file.path(sampletableDir, "HCvsFC_ALL_SampleTable.DEXSeq"),
+  stringsAsFactors=FALSE)[[1]]
+
+dxd = DEXSeqDataSetFromHTSeq(countFiles, sampleData=sampleTable, design= ~sample + exon + condition:exon, flattenedfile=flattenedFile )
+```
+
+analyze subset of genes
+```{r}
+geneDir = "/home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq"
+genesForSubset = read.table(
+  file.path(geneDir, "HCvsFC_subset_ens.txt"),
+  stringsAsFactors=FALSE)[[1]]
+  
+dxd = dxd[geneIDs( dxd ) %in% genesForSubset,]
+```
+Normalisation & Dispersion estimation & DEU test
+```{r}
+dxd = estimateSizeFactors( dxd )
+dxd = estimateDispersions( dxd )
+plotDispEsts( dxd )
+dxd = testForDEU( dxd )
+```
+
 
 
 ###5. 5HMC ANALYSIS:PEAK CALLING:MACS                                                                                    
