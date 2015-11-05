@@ -845,7 +845,7 @@ Peak sets: HCvsFC_5hmC_Dec_increment.bed, HCvsFC_5hmC_Inc_increment.bed, HCvsFC_
 
 Annotation of HCvsFC_AllDHMR.bed (using UCSC GTF used to align the files in the first place
 ```
-annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/HCvsFC_AllDHMR.bed /home/Shared/PengLab/iGenomes/Mus_musculus/UCSC/mm10/Annotation/Genes/genes.gtf >HCvsFC_AllDHMR_HomerAnnotations.txt
+annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/HCvsFC_AllDHMR.bed mm10 -annStats HCvsFC_AllDHMR_HomerAnnStats.txt >HCvsFC_AllDHMR_HomerAnnotations_2.txt
 ```
 
 python script
@@ -864,7 +864,7 @@ import fnmatch
 import pybedtools
  
  
-InputGeneNames = open('HCvsFC_AllDHMR_HomerAnnotations','r')
+InputGeneNames = open('HCvsFC_AllDHMR_HomerAnnotations.txt','r')
 GeneFileGTF = open('/home/Shared/PengLab/iGenomes/Mus_musculus/UCSC/mm10/Annotation/Genes/genes.gtf','r')
 GeneList = {}
 AccessionNumbers = {}
