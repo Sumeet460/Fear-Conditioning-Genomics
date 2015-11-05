@@ -630,13 +630,33 @@ dev.off()
 dxd = testForDEU( dxd )
 ```
 
-plotting
+plotting: Tac2
 ```{r}
 dxr2 = DEXSeqResults( dxd )
 pdf("Tac2_DEU.pdf")
 plotDEXSeq( dxr2, "ENSMUSG00000025400", legend=TRUE, cex.axis=1.2, cex=1.3, lwd=2 )
 dev.off()
 ```
+plotting: Nts
+```{r}
+pdf("Nts_DEU.pdf")
+plotDEXSeq( dxr2, "ENSMUSG00000019890", legend=TRUE, cex.axis=1.2, cex=1.3, lwd=2 )
+dev.off()
+```
+plotting: POMC
+```{r}
+pdf("POMC_DEU.pdf")
+plotDEXSeq( dxr2, "ENSMUSG00000020660", legend=TRUE, cex.axis=1.2, cex=1.3, lwd=2 )
+dev.off()
+```
+
+plotting: ErbB4
+```{r}
+pdf("ErbB4_DEU.pdf")
+plotDEXSeq( dxr2, "ENSMUSG00000062209", legend=TRUE, cex.axis=1.2, cex=1.3, lwd=2 )
+dev.off()
+```
+
 
 
 ###5. 5HMC ANALYSIS:PEAK CALLING:MACS                                                                                    
