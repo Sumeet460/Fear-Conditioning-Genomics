@@ -6,14 +6,15 @@ TABLE OF CONTENTS
 2. RNASEQ ANALYSIS, TRAPSEQ:DIFFERENTIAL EXPRESSION:CUFFDIFF
 3. RNASEQ ANALYSIS, TRAPSEQ:DIFFERENTIAL EXPRESSION:DESEQ2
 4. RNASEQ ANALYSIS, TRAPSEQ:DIFFERENTIAL SPLICING:DESEQ2/DEXSEQ
-5. 5HMC ANALYSIS:PEAK CALLING:MACS
-6. PARCE OUT REGIONS OF 5HMC, EXPRESSION, AND ISOFORM REGULATION:BEDTOOLS
-7. ANNOTATION ANALYSIS:HOMER
-8. MOTIF ANALYSIS:HOMER:MOTIF ID AND LOCALIZATION
-9. 5HMC ENRICHMENT ANALYSIS:HOMER:HISTOGRAMS AND SCATTERPLOTS: MOTIFS, PROMOTERS, EXONS, INTRONS, EXONS-INTRONS, CTCF, OTHER GENOMIC REGIONS (CPG ISLANDS, EXONS, LNCRNA, PSEUDOGENES, LOW COMPLEXITY REGIONS, SIMPLE REPEATS, SINES, SATELLITES
+5. RNASEQ ANALYSIS, TRAPSEQ:PATHWAT ANALYSIS:CONSENSUS PATH DATABASE
+6. 5HMC ANALYSIS:PEAK CALLING:MACS
+7. PARCE OUT REGIONS OF 5HMC, EXPRESSION, AND ISOFORM REGULATION:BEDTOOLS
+8. ANNOTATION ANALYSIS:HOMER
+9. MOTIF ANALYSIS:HOMER:MOTIF ID AND LOCALIZATION
+10. 5HMC ENRICHMENT ANALYSIS:HOMER:HISTOGRAMS AND SCATTERPLOTS: MOTIFS, PROMOTERS, EXONS, INTRONS, EXONS-INTRONS, CTCF, OTHER GENOMIC REGIONS (CPG ISLANDS, EXONS, LNCRNA, PSEUDOGENES, LOW COMPLEXITY REGIONS, SIMPLE REPEATS, SINES, SATELLITES
 5HMC AND ALTERNATIVE SPLICING
-10. FAST ANALYSIS: ANNOTATING REGIONS OF THE GENOME BASED ON DISEASE RELEVANT SNP CONTENT
-11. Homology ANALYSIS:PHASTCONS
+11. FAST ANALYSIS: ANNOTATING REGIONS OF THE GENOME BASED ON DISEASE RELEVANT SNP CONTENT
+12. Homology ANALYSIS:PHASTCONS
 
 
 ###1. ALIGNMENT: STAR
@@ -657,9 +658,189 @@ plotDEXSeq( dxr2, "ENSMUSG00000062209", legend=TRUE, cex.axis=1.2, cex=1.3, lwd=
 dev.off()
 ```
 
+###5. RNASEQ ANALYSIS, TRAPSEQ:PATHWAT ANALYSIS:CONSENSUS PATH DATABASE
+
+URL (HOME): http://cpdb.molgen.mpg.de/MCPDB
+Analyses:
+HOME/gene set analysis/over-representation analysis/enriched pathway-based sets/pathway-based sets
+
+HOME/gene set analysis/over-representation analysis/enriched pathway-based sets/Network neighborhood-based entity sets (NESTs)/1-next neighbor/AZI1 set center
+
+user-provided identifier    |entrez-gene ID    |entrez-gene name  
+------------------------------------------------------------------ 
+DENND4A     |10260     |DENND4A : DENN/MADD domain containing 4A
+MAP1B     |4131     |MAP1B : microtubule-associated protein 1B
+MIB1     |57534     |MIB1 : mindbomb E3 ubiquitin protein ligase 1
+CC2D2A     |57545     |CC2D2A : coiled-coil and C2 domain containing 2A
+DENND4C     |55667     |DENND4C : DENN/MADD domain containing 4C
+CPEB4     |80315     |CPEB4 : cytoplasmic polyadenylation element binding protein 4
+CDK5RAP2     |55755     |CDK5RAP2 : CDK5 regulatory subunit associated protein 2
+IRS2     |8660     |IRS2 : insulin receptor substrate 2
+ATM     |472     |ATM : ATM serine/threonine kinase
+SNTB2     |6645     |SNTB2 : syntrophin, beta 2 (dystrophin-associated protein A1, 59kDa, basic component 2)
+RAPGEF6     |51735     |RAPGEF6 : Rap guanine nucleotide exchange factor (GEF) 6
+KIF1B     |23095     |KIF1B : kinesin family member 1B
+BIRC6     |57448     |BIRC6 : baculoviral IAP repeat containing 6
+TTBK2     |146057     |TTBK2 : tau tubulin kinase 2
+STRN     |6801     |STRN : striatin, calmodulin binding protein
+NINL     |22981     |NINL : ninein-like
+FRYL     |285527     |FRYL : FRY-like
+CBL     |867     |CBL : Cbl proto-oncogene, E3 ubiquitin protein ligase
+GFOD1     |54438     |GFOD1 : glucose-fructose oxidoreductase domain containing 1
+MAP3K2     |10746     |MAP3K2 : mitogen-activated protein kinase kinase kinase 2
+PLK1     |5347     |PLK1 : polo-like kinase 1
+UTRN     |7402     |UTRN : utrophin
+RASAL2     |9462     |RASAL2 : RAS protein activator like 2
+RICTOR     |253260     |RICTOR : RPTOR independent companion of MTOR, complex 2
+TANC2     |26115     |TANC2 : tetratricopeptide repeat, ankyrin repeat and coiled-coil containing 2
+ALMS1     |7840     |ALMS1 : Alstrom syndrome protein 1
+NAV1     |89796     |NAV1 : neuron navigator 1
+HELZ     |9931     |HELZ : helicase with zinc finger
+DYNC1H1     |1778     |DYNC1H1 : dynein, cytoplasmic 1, heavy chain 1
+SHKBP1     |92799     |SHKBP1 : SH3KBP1 binding protein 1
+CCDC6     |8030     |CCDC6 : coiled-coil domain containing 6
+AKAP9     |10142     |AKAP9 : A kinase (PRKA) anchor protein 9
+LMO7     |4008     |LMO7 : LIM domain 7
 
 
-###5. 5HMC ANALYSIS:PEAK CALLING:MACS                                                                                    
+HOME/gene set analysis/over-representation analysis/enriched pathway-based sets/Network neighborhood-based entity sets (NESTs)/1-next neighbor/HDAC4 set center
+
+user-provided identifier    |entrez-gene ID    |entrez-gene name  
+------------------------------------------------------------------- 
+DENND4A     |10260     |DENND4A : DENN/MADD domain containing 4A
+JDP2     |122953     |JDP2 : Jun dimerization protein 2
+NAV1     |89796     |NAV1 : neuron navigator 1
+AR     |367     |AR : androgen receptor
+DENND4C     |55667     |DENND4C : DENN/MADD domain containing 4C
+IRS2     |8660     |IRS2 : insulin receptor substrate 2
+LCOR     |84458     |LCOR : ligand dependent nuclear receptor corepressor
+MAP3K2     |10746     |MAP3K2 : mitogen-activated protein kinase kinase kinase 2
+RAPGEF6     |51735     |RAPGEF6 : Rap guanine nucleotide exchange factor (GEF) 6
+ATRX     |546     |ATRX : alpha thalassemia/mental retardation syndrome X-linked
+KIF1B     |23095     |KIF1B : kinesin family member 1B
+BCL6     |604     |BCL6 : B-cell CLL/lymphoma 6
+SHKBP1     |92799     |SHKBP1 : SH3KBP1 binding protein 1
+CAMK4     |814     |CAMK4 : calcium/calmodulin-dependent protein kinase IV
+CBL     |867     |CBL : Cbl proto-oncogene, E3 ubiquitin protein ligase
+CDKN1A     |1026     |CDKN1A : cyclin-dependent kinase inhibitor 1A (p21, Cip1)
+ZMYND8     |23613     |ZMYND8 : zinc finger, MYND-type containing 8
+TRIP11     |9321     |TRIP11 : thyroid hormone receptor interactor 11
+DNAJB5     |25822     |DNAJB5 : DnaJ (Hsp40) homolog, subfamily B, member 5
+RASAL2     |9462     |RASAL2 : RAS protein activator like 2
+RICTOR     |253260     |RICTOR : RPTOR independent companion of MTOR, complex 2
+NCOR2     |9612     |NCOR2 : nuclear receptor corepressor 2
+TANC2     |26115     |TANC2 : tetratricopeptide repeat, ankyrin repeat and coiled-coil containing 2
+ZBTB16     |7704     |ZBTB16 : zinc finger and BTB domain containing 16
+RANBP2     |5903     |RANBP2 : RAN binding protein 2
+REV3L     |5980     |REV3L : REV3-like, polymerase (DNA directed), zeta, catalytic subunit
+CCDC6     |8030     |CCDC6 : coiled-coil domain containing 6
+LMO7     |4008     |LMO7 : LIM domain 7
+
+
+HOME/gene set analysis/over-representation analysis/enriched pathway-based sets/Network neighborhood-based entity sets (NESTs)/2-next neighbor/CaM1,CaM3,CaM2 set center
+
+user-provided identifier    |entrez-gene ID    |entrez-gene name   
+--------------------------------------------------------------------
+NRIP1     |8204     |NRIP1 : nuclear receptor interacting protein 1
+UBN2     |254048     |UBN2 : ubinuclein 2
+ESYT2     |57488     |ESYT2 : extended synaptotagmin-like protein 2
+ADRA1A     |148     |ADRA1A : adrenoceptor alpha 1A
+ITGA10     |8515     |ITGA10 : integrin, alpha 10
+ARHGAP5     |394     |ARHGAP5 : Rho GTPase activating protein 5
+IRS2     |8660     |IRS2 : insulin receptor substrate 2
+AVP     |551     |AVP : arginine vasopressin
+BCL6     |604     |BCL6 : B-cell CLL/lymphoma 6
+BDNF     |627     |BDNF : brain-derived neurotrophic factor
+DST     |667     |DST : dystonin
+CAMK4     |814     |CAMK4 : calcium/calmodulin-dependent protein kinase IV
+DLGAP2     |9228     |DLGAP2 : discs, large (Drosophila) homolog-associated protein 2
+RASAL2     |9462     |RASAL2 : RAS protein activator like 2
+COL19A1     |1310     |COL19A1 : collagen, type XIX, alpha 1
+CLOCK     |9575     |CLOCK : clock circadian regulator
+ARC     |23237     |ARC : activity-regulated cytoskeleton-associated protein
+DCC     |1630     |DCC : DCC netrin 1 receptor
+DCN     |1634     |DCN : decorin
+EGR1     |1958     |EGR1 : early growth response 1
+ERBB4     |2066     |ERBB4 : erb-b2 receptor tyrosine kinase 4
+GABRB2     |2561     |GABRB2 : gamma-aminobutyric acid (GABA) A receptor, beta 2
+RAPGEF6     |51735     |RAPGEF6 : Rap guanine nucleotide exchange factor (GEF) 6
+RSF1     |51773     |RSF1 : remodeling and spacing factor 1
+SHKBP1     |92799     |SHKBP1 : SH3KBP1 binding protein 1
+ST6GAL2     |84620     |ST6GAL2 : ST6 beta-galactosamide alpha-2,6-sialyltranferase 2
+DUSP4     |1846     |DUSP4 : dual specificity phosphatase 4
+GRIN2A     |2903     |GRIN2A : glutamate receptor, ionotropic, N-methyl D-aspartate 2A
+GRIN2B     |2904     |GRIN2B : glutamate receptor, ionotropic, N-methyl D-aspartate 2B
+GRM4     |2914     |GRM4 : glutamate receptor, metabotropic 4
+GRM5     |2915     |GRM5 : glutamate receptor, metabotropic 5
+PTPRT     |11122     |PTPRT : protein tyrosine phosphatase, receptor type, T
+HTT     |3064     |HTT : huntingtin
+SYNPO     |11346     |SYNPO : synaptopodin
+NR4A1     |3164     |NR4A1 : nuclear receptor subfamily 4, group A, member 1
+GAL     |51083     |GAL : galanin/GMAP prepropeptide
+INSR     |3643     |INSR : insulin receptor
+ITGA4     |3676     |ITGA4 : integrin, alpha 4 (antigen CD49D, alpha 4 subunit of VLA-4 receptor)
+ITGB8     |3696     |ITGB8 : integrin, beta 8
+ITPR1     |3708     |ITPR1 : inositol 1,4,5-trisphosphate receptor, type 1
+KCNA2     |3737     |KCNA2 : potassium channel, voltage gated shaker related subfamily A, member 2
+KCNA3     |3738     |KCNA3 : potassium channel, voltage gated shaker related subfamily A, member 3
+KCNMA1     |3778     |KCNMA1 : potassium channel, calcium activated large conductance subfamily M alpha, member 1
+KCNN3     |3782     |KCNN3 : potassium channel, calcium activated intermediate/small conductance subfamily N alpha, member 3
+LAMC2     |3918     |LAMC2 : laminin, gamma 2
+LRP6     |4040     |LRP6 : low density lipoprotein receptor-related protein 6
+CD46     |4179     |CD46 : CD46 molecule, complement regulatory protein
+MECP2     |4204     |MECP2 : methyl CpG binding protein 2
+SHC3     |53358     |SHC3 : SHC (Src homology 2 domain containing) transforming protein 3
+DENND4A     |10260     |DENND4A : DENN/MADD domain containing 4A
+HIPK2     |28996     |HIPK2 : homeodomain interacting protein kinase 2
+NEFM     |4741     |NEFM : neurofilament, medium polypeptide
+NRCAM     |4897     |NRCAM : neuronal cell adhesion molecule
+NTS     |4922     |NTS : neurotensin
+OPRD1     |4985     |OPRD1 : opioid receptor, delta 1
+UHMK1     |127933     |UHMK1 : U2AF homology motif (UHM) kinase 1
+PDYN     |5173     |PDYN : prodynorphin
+PNOC     |5368     |PNOC : prepronociceptin
+POMC     |5443     |POMC : proopiomelanocortin
+PRKCD     |5580     |PRKCD : protein kinase C, delta
+MAP2K6     |5608     |MAP2K6 : mitogen-activated protein kinase kinase 6
+PTPRB     |5787     |PTPRB : protein tyrosine phosphatase, receptor type, B
+PTPRC     |5788     |PTPRC : protein tyrosine phosphatase, receptor type, C
+PTPRD     |5789     |PTPRD : protein tyrosine phosphatase, receptor type, D
+HMBOX1     |79618     |HMBOX1 : homeobox containing 1
+ZMYM1     |79830     |ZMYM1 : zinc finger, MYM-type 1
+RPS6KA3     |6197     |RPS6KA3 : ribosomal protein S6 kinase, 90kDa, polypeptide 3
+RXRG     |6258     |RXRG : retinoid X receptor, gamma
+RYR2     |6262     |RYR2 : ryanodine receptor 2 (cardiac)
+NAV1     |89796     |NAV1 : neuron navigator 1
+SDC4     |6385     |SDC4 : syndecan 4
+CNKSR2     |22866     |CNKSR2 : connector enhancer of kinase suppressor of Ras 2
+DENND4C     |55667     |DENND4C : DENN/MADD domain containing 4C
+SNTB2     |6645     |SNTB2 : syntrophin, beta 2 (dystrophin-associated protein A1, 59kDa, basic component 2)
+PEG10     |23089     |PEG10 : paternally expressed 10
+KIF1B     |23095     |KIF1B : kinesin family member 1B
+SSTR2     |6752     |SSTR2 : somatostatin receptor 2
+STRN     |6801     |STRN : striatin, calmodulin binding protein
+TACR1     |6869     |TACR1 : tachykinin receptor 1
+TACR3     |6870     |TACR3 : tachykinin receptor 3
+MGA     |23269     |MGA : MGA, MAX dimerization protein
+SATB2     |23314     |SATB2 : SATB homeobox 2
+MAP3K2     |10746     |MAP3K2 : mitogen-activated protein kinase kinase kinase 2
+TRAF3     |7187     |TRAF3 : TNF receptor-associated factor 3
+TRPC5     |7224     |TRPC5 : transient receptor potential cation channel, subfamily C, member 5
+UTRN     |7402     |UTRN : utrophin
+CYP26B1     |56603     |CYP26B1 : cytochrome P450, family 26, subfamily B, polypeptide 1
+RICTOR     |253260     |RICTOR : RPTOR independent companion of MTOR, complex 2
+ZBTB16     |7704     |ZBTB16 : zinc finger and BTB domain containing 16
+SESTD1     |91404     |SESTD1 : SEC14 and spectrin domains 1
+COL12A1     |1303     |COL12A1 : collagen, type XII, alpha 1
+NAV3     |89795     |NAV3 : neuron navigator 3
+CCDC6     |8030     |CCDC6 : coiled-coil domain containing 6
+GPR68     |8111     |GPR68 : G protein-coupled receptor 68
+
+HOME/gene set analysis/over-representation analysis/enriched pathway-based sets/Network neighborhood-based entity sets (NESTs)/2-next neighbor/PSD-1 set center
+
+HOME/gene set analysis/over-representation analysis/enriched pathway-based sets/Network neighborhood-based entity sets (NESTs)/2-next neighbor/NCAM set center
+
+###6. 5HMC ANALYSIS:PEAK CALLING:MACS                                                                                    
 
 MACS + peaksplitter to call subpeaks within complex regions
 MACS/FC1
@@ -679,7 +860,7 @@ MACS/HC2
 /home/ssharma/bin/MACS-1.4.2/bin/macs14 --name fear_conditioning_HC2_5hmC_MACS --format BAM --gsize mm --call-subpeaks --bdg --treatment /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs/Sample_HC2.bam --control /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs/Sample_InputHC1.bam &
 ```
 
-###6. PARCE OUT REGIONS OF 5HMC, EXPRESSION, AND ISOFORM REGULATION:BEDTOOLS
+###7. PARCE OUT REGIONS OF 5HMC, EXPRESSION, AND ISOFORM REGULATION:BEDTOOLS
 
 Calling DhMRs common to both sequencing experiments. Save the sequence JUST where two peaks overlap (no extra peak space unique to one sample or the other). Also create a "Peakheight" file that contains the entries that are overlapped; allows downstream analysis of relative 5hmC changes
 
@@ -830,9 +1011,10 @@ Other interesting coordinate sets to generate
  -RNAseq and TRAPSeq
  -5hmCseq and enhancers
  -5hmCseq and insulators
+
 ```
 
-###7. ANNOTATION ANALYSIS:HOMER
+###8. ANNOTATION ANALYSIS:HOMER
 
  -HCvsFC_5hmCseq_Inc
  -HCvsFC_5hmCseq_Dec
@@ -907,7 +1089,7 @@ for AccessionNumber in AccessionNumbers.keys():
 ```
 
 
-###8. MOTIF ANALYSIS:HOMER:MOTIF ID AND LOCALIZATION
+###9. MOTIF ANALYSIS:HOMER:MOTIF ID AND LOCALIZATION
 
 *Background* Files are critical - they are how homer decides which TF sites are overrepresented
 wholegene - mm10 all genes
@@ -1058,7 +1240,7 @@ More Other analyses:
  -FindMotifs/5hmC-Seq_CTCF/5hmC_CTCF_overlap
 ```
 
-###9. 5HMC ENRICHMENT ANALYSIS:HOMER:HISTOGRAMS AND SCATTERPLOTS: MOTIFS, PROMOTERS, EXONS, INTRONS, EXONS-INTRONS, CTCF, OTHER GENOMIC REGIONS (CPG ISLANDS, EXONS, LNCRNA, PSEUDOGENES, LOW COMPLEXITY REGIONS, SIMPLE REPEATS, SINES, SATELLITES
+###10. 5HMC ENRICHMENT ANALYSIS:HOMER:HISTOGRAMS AND SCATTERPLOTS: MOTIFS, PROMOTERS, EXONS, INTRONS, EXONS-INTRONS, CTCF, OTHER GENOMIC REGIONS (CPG ISLANDS, EXONS, LNCRNA, PSEUDOGENES, LOW COMPLEXITY REGIONS, SIMPLE REPEATS, SINES, SATELLITES
 
 ***Workflow***
 A) Create tag directories -> containers with all of the bam file reads (from all replicates) in one container - used to pileup all the reads from one condition in order to get a comprehensive picture of the density of reads in particular loci
@@ -1346,8 +1528,8 @@ exon boundaries: +/- 50 bp from exons
 ```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/mm10_exonboundaries.bed mm10 -size 1000 -fragLength 150 -annStats Homer_mm10_exonboundaries_annStats -d /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/HC_hMeDIP_BAMs_tag_directory/ /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/homer/Homer_Tag_Directories/FC_hMeDIP_BAMs_tag_directory/ >Homer_FearConditioning_5hmC_mm10_exonboundaries_ComprehensiveComparison_2 &
 ```
-###10. FAST ANALYSIS: ANNOTATING REGIONS OF THE GENOME BASED ON DISEASE RELEVANT SNP CONTENT
-###11. Homology ANALYSIS:PHASTCONS
+###11. FAST ANALYSIS: ANNOTATING REGIONS OF THE GENOME BASED ON DISEASE RELEVANT SNP CONTENT
+###12. Homology ANALYSIS:PHASTCONS
 
 
 
