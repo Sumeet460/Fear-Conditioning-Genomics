@@ -666,8 +666,8 @@ HOME/gene set analysis/over-representation analysis/enriched pathway-based sets/
 
 HOME/gene set analysis/over-representation analysis/enriched pathway-based sets/Network neighborhood-based entity sets (NESTs)/1-next neighbor/AZI1 set center
 
-user-provided identifier    |entrez-gene ID    |entrez-gene name  
------------------------------------------------------------------- 
+user-provided identifier |entrez-gene ID |entrez-gene name  
+-------------------------|----------------|------------------------- 
 DENND4A     |10260     |DENND4A : DENN/MADD domain containing 4A
 MAP1B     |4131     |MAP1B : microtubule-associated protein 1B
 MIB1     |57534     |MIB1 : mindbomb E3 ubiquitin protein ligase 1
@@ -706,7 +706,7 @@ LMO7     |4008     |LMO7 : LIM domain 7
 HOME/gene set analysis/over-representation analysis/enriched pathway-based sets/Network neighborhood-based entity sets (NESTs)/1-next neighbor/HDAC4 set center
 
 user-provided identifier    |entrez-gene ID    |entrez-gene name  
-------------------------------------------------------------------- 
+-----------------------------|-----------------|--------------------- 
 DENND4A     |10260     |DENND4A : DENN/MADD domain containing 4A
 JDP2     |122953     |JDP2 : Jun dimerization protein 2
 NAV1     |89796     |NAV1 : neuron navigator 1
@@ -739,8 +739,8 @@ LMO7     |4008     |LMO7 : LIM domain 7
 
 HOME/gene set analysis/over-representation analysis/enriched pathway-based sets/Network neighborhood-based entity sets (NESTs)/2-next neighbor/CaM1,CaM3,CaM2 set center
 
-user-provided identifier    |entrez-gene ID    |entrez-gene name   
---------------------------------------------------------------------
+user-provided identifier |entrez-gene ID    |entrez-gene name   
+--------------------------|------------------|------------------------
 NRIP1     |8204     |NRIP1 : nuclear receptor interacting protein 1
 UBN2     |254048     |UBN2 : ubinuclein 2
 ESYT2     |57488     |ESYT2 : extended synaptotagmin-like protein 2
