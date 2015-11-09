@@ -1030,6 +1030,12 @@ Annotation of HCvsFC_AllDHMR.bed (using UCSC GTF used to align the files in the 
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/HCvsFC_AllDHMR.bed mm10 -annStats HCvsFC_AllDHMR_HomerAnnStats.txt >HCvsFC_AllDHMR_HomerAnnotations_2.txt
 ```
 
+Annotation of Smarca4 binding sites:
+Note: use homer annotation files in this folder w/ all of Bing's stuff in there
+'''
+annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/smarca4_forbrain_chipseq.bed mm9 -annStats smarca4_forebrain_HomerAnnStats.txt >smarca4_forebrain_HomerAnnotations.txt
+'''
+
 python script
 ```
 ~/bin/ExtractGeneNames_HomerOutput_Down.py HCvsFC_AllDHMR_HomerAnnotations.txt HCvsFC_AllDHMR_HomerAnnotations_Craig.txt
@@ -1047,7 +1053,7 @@ import pybedtools
  
  
 InputGeneNames = open('HCvsFC_AllDHMR_HomerAnnotations.txt','r')
-GeneFileGTF = open('/home/Shared/PengLab/iGenomes/Mus_musculus/UCSC/mm10/Annotation/Genes/genes.gtf','r')
+GeneFileGTF = open('/home/byao/homer/data/accession/mouse2gene.tsv','r')
 GeneList = {}
 AccessionNumbers = {}
  
