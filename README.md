@@ -867,9 +867,10 @@ Calling DhMRs common to both sequencing experiments. Save the sequence JUST wher
 Note: needed to remove the header line -- bedtools was unable to recognize it: Chromosome      Start   End     Height  SummitPosition
 
 Common Homecage peaks
+
 ```
 bedtools intersect -a /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/fear_conditioning_HC1_5hmC_MACS/fear_conditioning_HC1_5hmC_MACS_peaks.subpeaks.bed -b /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/fear_conditioning_HC2_5hmC_MACS/fear_conditioning_HC2_5hmC_MACS_peaks.subpeaks.bed -bed -sorted -g /home/Shared/PengLab/iGenomes/Mus_musculus/UCSC/mm10/Annotation/Genes/ChromInfo.txt >HC1_HC2_BTIntersect.peaks.subpeaks.bed
-```
+
 
 Common homecage peaks; retain all the fields, so that peak height can be kept for downstream analyses
 ```
@@ -1032,9 +1033,16 @@ annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_
 
 Annotation of Smarca4 binding sites:
 Note: use homer annotation files in this folder w/ all of Bing's stuff in there
-'''
+```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/smarca4_forbrain_chipseq.bed mm9 -annStats smarca4_forebrain_HomerAnnStats.txt >smarca4_forebrain_HomerAnnotations.txt
-'''
+```
+
+Annotate RNAseq Genes in Homer!
+```
+annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_wholegene_ALL.bed mm10  >HCvsFC_RNAseq_wholegene_HomerAnnotations.txt
+```
+
+
 
 python script
 ```
