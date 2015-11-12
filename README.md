@@ -15,6 +15,7 @@ TABLE OF CONTENTS
 5HMC AND ALTERNATIVE SPLICING
 11. FAST ANALYSIS: ANNOTATING REGIONS OF THE GENOME BASED ON DISEASE RELEVANT SNP CONTENT
 12. Homology ANALYSIS:PHASTCONS
+13. GWAS & GxE:IMPUTE2
 
 
 ###1. ALIGNMENT: STAR
@@ -580,7 +581,7 @@ python /mnt/icebreaker/data/home/ssharma/R/x86_64-unknown-linux-gnu-library/3.1/
 
 Read data into R
 ```
-countDir = "/home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq/ExonCounts"
+countDir = "/home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq/ExonCounts2"
 countFiles = list.files(countDir, pattern="ExonCounts.txt$", full.names=TRUE)
 flatDir = "/home/Shared/PengLab/iGenomes/Mus_musculus/ensembl/GRCm38.79/Annotation/Genes"
 flattenedFile = list.files(flatDir, pattern="gff$", full.names=TRUE)
@@ -594,6 +595,12 @@ sampleTable = data.frame(
    row.names = c( "10_FC-Alone", "11_FC-Alone", "12_FC-Alone", "1-935-HC", "19_HC", "20_HC", "21_HC", "22_HC", "23_HC", "24_HC", "2-935-HC", "3-940-FC", "4-940-FC", "5-938-FC", "6-938-FC", "7-947-HC", "8-947-HC", "8_FC-Alone", "9_FC-Alone" ),
    condition = c("FearConditioning", "FearConditioning", "FearConditioning", "HomeCage", "HomeCage", "HomeCage", "HomeCage", "HomeCage", "HomeCage", "HomeCage", "HomeCage", "FearConditioning", "FearConditioning", "FearConditioning", "FearConditioning", "HomeCage", "HomeCage", "FearConditioning", "FearConditioning" )
    )
+   
+   
+sampleTable = data.frame(
+   row.names = c( "10_FC-Alone", "11_FC-Alone", "12_FC-Alone", "19_HC", "20_HC", "21_HC", "22_HC", "23_HC", "24_HC", "8_FC-Alone", "9_FC-Alone"),
+   condition = c("FearConditioning", "FearConditioning", "FearConditioning", "HomeCage", "HomeCage", "HomeCage", "HomeCage", "HomeCage", "HomeCage", "FearConditioning", "FearConditioning" )
+   )
 
 ```
 
@@ -602,12 +609,7 @@ Data object creation
 ```{r}
 library( "DEXSeq" )
 
-sampletableDir = "/home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq"
-sampleTable = read.table(
-  file.path(sampletableDir, "HCvsFC_ALL_SampleTable.DEXSeq"),
-  stringsAsFactors=FALSE)[[1]]
-
-BPPARAM = MultiCoreParam(workers=25)
+BPPARAM = MulticoreParam(workers=25)
 dxd = DEXSeqDataSetFromHTSeq(countFiles, sampleData=sampleTable, design= ~sample + exon + condition:exon, flattenedfile=flattenedFile )
 ```
 
@@ -615,7 +617,7 @@ analyze subset of genes
 ```{r}
 geneDir = "/home/ssharma/Ressler_RNASeq/analysis/FearConditioning_RNASeq_DEXSeq"
 genesForSubset = read.table(
-  file.path(geneDir, "GABAergic_Pathway.txt"),
+  file.path(geneDir, "ENS_Genes"),
   stringsAsFactors=FALSE)[[1]]
   
 dxd = dxd[geneIDs( dxd ) %in% genesForSubset,]
@@ -624,11 +626,15 @@ Normalisation & Dispersion estimation & DEU test
 ```{r}
 dxd = estimateSizeFactors( dxd )
 dxd = estimateDispersions( dxd, BPPARAM=BPPARAM )
-
+```
+Dispersion plots
+```
 pdf("Dispersion_estimates.pdf")
 plotDispEsts( dxd )
 dev.off()
-
+```
+DEU testing
+```
 dxd = testForDEU( dxd, BPPARAM=BPPARAM )
 dxd = estimateExonFoldChanges( dxd, fitExpToVar="condition", BPPARAM=BPPARAM )
 dxr1 = DEXSeqResults( dxd )
@@ -642,9 +648,8 @@ table ( dxr1$padj < 0.1 )
 
 plotting: Gphn
 ```{r}
-dxr2 = DEXSeqResults( dxd )
-pdf("Gphn_DEU.pdf")
-plotDEXSeq( dxr2, "ENSMUSG00000047454", legend=TRUE, cex.axis=1.2, cex=1.3, lwd=2 )
+pdf("Gphn_2_DEU.pdf")
+plotDEXSeq( dxr1, "ENSMUSG00000047454", legend=TRUE, displayTranscripts=TRUE, norCounts=TRUE, expression=FALSE, splicing=TRUE, cex.axis=1.2, cex=1.3, lwd=2 )
 dev.off()
 ```
 
@@ -669,10 +674,58 @@ dev.off()
 ```
 plotting: Gabrg1_2
 ```{r}
-pdf("Gabrg1_2_DEU.pdf")
+pdf("Gabrg1_3_DEU.pdf")
 plotDEXSeq( dxr1, "ENSMUSG00000001260", legend=TRUE, displayTranscripts=TRUE, norCounts=TRUE, expression=FALSE, splicing=TRUE, cex.axis=1.2, cex=1.3, lwd=2 )
 dev.off()
 ```
+plotting: Cacn1e
+```{r}
+pdf("Cacn1e.pdf")
+plotDEXSeq( dxr1, "ENSMUSG00000004110", legend=TRUE, displayTranscripts=TRUE, norCounts=TRUE, expression=FALSE, splicing=TRUE, cex.axis=1.2, cex=1.3, lwd=2 )
+dev.off()
+```
+
+plotting: Bicd1
+```{r}
+pdf("Bicd1.pdf")
+plotDEXSeq( dxr1, "ENSMUSG00000003452", legend=TRUE, displayTranscripts=TRUE, norCounts=TRUE, expression=FALSE, splicing=TRUE, cex.axis=1.2, cex=1.3, lwd=2 )
+dev.off()
+```
+
+plotting: Glg1
+```{r}
+pdf("Glg1.pdf")
+plotDEXSeq( dxr1, "ENSMUSG00000003316", legend=TRUE, displayTranscripts=TRUE, norCounts=TRUE, expression=FALSE, splicing=TRUE, cex.axis=1.2, cex=1.3, lwd=2 )
+dev.off()
+```
+
+plotting: Plag1
+```{r}
+pdf("Plag1.pdf")
+plotDEXSeq( dxr1, "ENSMUSG00000003282", legend=TRUE, displayTranscripts=TRUE, norCounts=TRUE, expression=FALSE, splicing=TRUE, cex.axis=1.2, cex=1.3, lwd=2 )
+dev.off()
+```
+
+plotting: Ranbp2
+```{r}
+pdf("Ranbp2.pdf")
+plotDEXSeq( dxr1, "ENSMUSG00000003226", legend=TRUE, displayTranscripts=TRUE, norCounts=TRUE, expression=FALSE, splicing=TRUE, cex.axis=1.2, cex=1.3, lwd=2 )
+dev.off()
+```
+
+plotting: Peg3
+```{r}
+pdf("Peg3.pdf")
+plotDEXSeq( dxr1, "ENSMUSG00000002265", legend=TRUE, displayTranscripts=TRUE, norCounts=TRUE, expression=FALSE, splicing=TRUE, cex.axis=1.2, cex=1.3, lwd=2 )
+dev.off()
+```
+plotting: Celf2
+```{r}
+pdf("Celf2.pdf")
+plotDEXSeq( dxr1, "ENSMUSG00000002107", legend=TRUE, displayTranscripts=TRUE, norCounts=TRUE, expression=FALSE, splicing=TRUE, cex.axis=1.2, cex=1.3, lwd=2 )
+dev.off()
+```
+
 plotting: Gabarap
 ```{r}
 pdf("Gabarap_DEU.pdf")
@@ -709,7 +762,7 @@ dev.off()
 
 plotting: Gad1_3
 ```{r}
-pdf("Gad1_4_DEU.pdf")
+pdf("Gad1__5_DEU.pdf")
 plotDEXSeq( dxr1, "ENSMUSG00000070880", legend=TRUE, displayTranscripts=TRUE, norCounts=TRUE, expression=FALSE, splicing=TRUE, cex.axis=1.2, cex=1.3, lwd=2 )
 dev.off()
 ```
@@ -734,15 +787,20 @@ pdf("Slc6a12_DEU.pdf")
 plotDEXSeq( dxr1, "ENSMUSG00000030109", legend=TRUE, cex.axis=1.2, cex=1.3, lwd=2 )
 dev.off()
 ```
-
+plotting: gabra1
+```{r}
+pdf("Gabra1_DEU.pdf")
+plotDEXSeq( dxr1, "ENSMUSG00000010803", legend=TRUE, displayTranscripts=TRUE, norCounts=TRUE, expression=FALSE, splicing=TRUE, cex.axis=1.2, cex=1.3, lwd=2)
+dev.off()
+```
 
 
 
 plotting: Tac2
 ```{r}
 dxr2 = DEXSeqResults( dxd )
-pdf("Tac2_DEU.pdf")
-plotDEXSeq( dxr2, "ENSMUSG00000025400", legend=TRUE, cex.axis=1.2, cex=1.3, lwd=2 )
+pdf("Tac2_1_DEU.pdf")
+plotDEXSeq( dxr1, "ENSMUSG00000025400", legend=TRUE, displayTranscripts=TRUE, norCounts=TRUE, expression=FALSE, splicing=TRUE, cex.axis=1.2, cex=1.3, lwd=2)
 dev.off()
 ```
 plotting: Nts
