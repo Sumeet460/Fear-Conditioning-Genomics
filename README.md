@@ -1006,7 +1006,7 @@ HOME/gene set analysis/over-representation analysis/enriched pathway-based sets/
 HOME/gene set analysis/over-representation analysis/enriched pathway-based sets/Network neighborhood-based entity sets (NESTs)/2-next neighbor/NCAM set center
 
 ###6. 5HMC ANALYSIS:PEAK CALLING:MACS                                                                                    
-
+Approach 1: call peaks for each sample against the input, then do complex analysis on the lotof it
 MACS + peaksplitter to call subpeaks within complex regions
 MACS/FC1
 ```
@@ -1025,9 +1025,26 @@ MACS/HC2
 /home/ssharma/bin/MACS-1.4.2/bin/macs14 --name fear_conditioning_HC2_5hmC_MACS --format BAM --gsize mm --call-subpeaks --bdg --treatment /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs/Sample_HC2.bam --control /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs/Sample_InputHC1.bam &
 ```
 
+Approach 2: concatenate BAM files for the HC and for the FC --> perform MACS as HC against FC as input (so get peaks where HC is way more enriched than FC); and as FC against HC as input (so get peaks where FC is way more enriched than HC)
+
+combine BAMs MACS
+```
+/home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs
+
+/home/ssharma/bin/MACS-1.4.2/bin/macs14 --name 5hmC_DecInFC --format BAM --gsize mm --call-subpeaks --bdg --treatment /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs/ALL_HC.bam --control /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs/ALL_FC.bam &
+
+/home/ssharma/bin/MACS-1.4.2/bin/macs14 --name HCvsFC-input --format BAM --gsize mm --call-subpeaks --bdg --treatment /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs/ALL_FC.bam --control /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs/ALL_HC.bam &
+
+```
+
+
+
+
 ###7. PARCE OUT REGIONS OF 5HMC, EXPRESSION, AND ISOFORM REGULATION:BEDTOOLS
 
 Calling DhMRs common to both sequencing experiments. Save the sequence JUST where two peaks overlap (no extra peak space unique to one sample or the other). Also create a "Peakheight" file that contains the entries that are overlapped; allows downstream analysis of relative 5hmC changes
+
+
 
 Note: needed to remove the header line -- bedtools was unable to recognize it: Chromosome      Start   End     Height  SummitPosition
 
