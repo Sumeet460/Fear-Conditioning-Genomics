@@ -215,6 +215,18 @@ mkdir 8-947-HC
 cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC/8-947-HC
 /home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --runThreadN 25 --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/STARAlignedBAMs_UCSC/8-947-HC/8-947-HC_ --outSAMstrandField intronMotif --outSAMtype BAM SortedByCoordinate --readFilesCommand zcat --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_Amygdala_RNASeq_Replication/fastq_files/8-947-HC_GGCTAC_L008_R1_001.fastq.gz
 ```
+**STAR Alignment: Combined HC, FC 5hmC Seq with UCSC***
+```
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC
+mkdir FC_5hmC_ALLreps
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/FC_5hmC_ALLreps
+/home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --runThreadN 25 --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/FC_5hmC_ALLreps/FC_5hmC_ALLreps_ --outSAMstrandField intronMotif --outSAMtype BAM SortedByCoordinate --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/fastq_combined_files/FC_5hmC_ALLreps.fastq &
+
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC
+mkdir HC_5hmC_ALLreps
+cd /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/HC_5hmC_ALLreps
+/home/ssharma/bin/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR --runThreadN 25 --genomeDir /home/Shared/PengLab/iGenomes/Mus_musculus/RepeatMasker/mm10/Sequence/STARIndex --outFileNamePrefix /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/HC_5hmC_ALLreps/HC_5hmC_ALLreps_ --outSAMstrandField intronMotif --outSAMtype BAM SortedByCoordinate --outFilterIntronMotifs RemoveNoncanonical --quantMode GeneCounts --readFilesIn /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/fastq_combined_files/HC_5hmC_ALLreps.fastq &
+```
 
 **STAR Alignment: ensembl**
 
@@ -1029,11 +1041,10 @@ Approach 2: concatenate BAM files for the HC and for the FC --> perform MACS as 
 
 combine BAMs MACS
 ```
-/home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs
 
-/home/ssharma/bin/MACS-1.4.2/bin/macs14 --name 5hmC_DecInFC --format BAM --gsize mm --call-subpeaks --bdg --treatment /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs/ALL_HC.bam --control /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs/ALL_FC.bam &
+/home/ssharma/bin/MACS-1.4.2/bin/macs14 --name 5hmC_DecInFC --format BAM --gsize mm --call-subpeaks --bdg --treatment /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs/HC_5hmC_ALLreps_Aligned.sortedByCoord.out.bam --control /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs/FC_5hmC_ALLreps_Aligned.sortedByCoord.out.bam &
 
-/home/ssharma/bin/MACS-1.4.2/bin/macs14 --name HCvsFC-input --format BAM --gsize mm --call-subpeaks --bdg --treatment /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs/ALL_FC.bam --control /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs/ALL_HC.bam &
+/home/ssharma/bin/MACS-1.4.2/bin/macs14 --name 5hmC_IncInFC --format BAM --gsize mm --call-subpeaks --bdg --treatment /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs/FC_5hmC_ALLreps_Aligned.sortedByCoord.out.bam --control /home/ssharma/Ressler_RNASeq/data/FearConditioning_5hmC_Seq/STAR_Aligned_BAMs_UCSC/BAMs/HC_5hmC_ALLreps_Aligned.sortedByCoord.out.bam &
 
 ```
 
