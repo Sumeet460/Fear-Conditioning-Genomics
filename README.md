@@ -1224,13 +1224,19 @@ Annotation of HCvsFC_AllDHMR.bed (using UCSC GTF used to align the files in the 
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/HCvsFC_AllDHMR.bed mm10 -annStats HCvsFC_AllDHMR_HomerAnnStats.txt >HCvsFC_AllDHMR_HomerAnnotations_2.txt
 ```
 
+Annotation of peaks called by concatenating replicate fasta files and using either HC or FC as the input
+```
+annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/HCvsFC_Dynamic5hmC_ALL.bed mm10 -annStats HCvsFC_ALLDynamic5hmC_HomerAnnStats.txt >HCvsFC_ALLDynamic5hmC_HomerAnnotations.txt
+
+```
+
 Annotation of Smarca4 binding sites:
 Note: use homer annotation files in this folder w/ all of Bing's stuff in there
 ```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/smarca4_forbrain_chipseq.bed mm9 -annStats smarca4_forebrain_HomerAnnStats.txt >smarca4_forebrain_HomerAnnotations.txt
 ```
 
-Annotate RNAseq Genes in Homer!
+Annotate RNAseq Genes in Homer
 ```
 annotatePeaks.pl /home/ssharma/Ressler_RNASeq/analysis/FearConditioning_5hmCSeq_MACS/bedtools/datasets/HCvsFC_RNAseq_wholegene_ALL.bed mm10  >HCvsFC_RNAseq_wholegene_HomerAnnotations.txt
 ```
